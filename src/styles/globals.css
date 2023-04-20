@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+svg {
+  display: inline;
+}
+
+.searchBox:focus {
+  box-shadow: none;
+}
+.multiSelectContainer li:hover {
+  background: #de0a53;
+  color: #000;
+  cursor: pointer;
+}
+.dropdown-box {
+  background: #fff;
+  position: absolute;
+  padding: 10px;
+  z-index: 99;
+}
+.dropdown-menu.dropdown-menu-right {
+  right: 0;
+}
+html {
+  height: 100%;
+  overflow: auto;
+}
+body {
+  height: 100%;
+}
+.flex-h-center {
+  display: flex;
+  justify-content: center;
+}
+.input-fields:focus {
+  border: 0px;
+  box-shadow: none;
+}
+.searchWrapper {
+  border: none;
+}
+.text-center {
+  text-align: center;
+}
+
+  .circle {
+    position: relative;
+    border-radius: 100%;
+    height: 16px;
+    width: 16px;
+    border: 1px solid white;
+  }
+  .circle-fill{
+    position: relative;
+    border-radius: 100%;
+    height: 16px;
+    width: 16px;
+    border: 1px solid #16E7CF;
+      background-color: #16E7CF;
+  }
+  .checkMark {
+    position: absolute;
+    transform: rotate(50deg) translate(-50%, -50%);
+    left: 3px;
+    top: 45%;
+    height: 8px;
+    width: 4px;
+    border-bottom: 2px solid #fff;
+    border-right: 2px solid #fff;
+ 
+  }
+  .checkMark-fill{
+    border-bottom: 2px solid #000;
+    border-right: 2px solid #000;
+  }
+
+
+.banner-cover {
+  background: rgb(31,33,37);
+  background: linear-gradient(0deg, rgba(31,33,37,1) 20%, rgba(31,33,37,0) 100%);
+}
+
+.disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+.disabled * {
+  cursor: not-allowed;
+}
+
+
+[type='checkbox']:checked {
+  background-image: none;
+}
