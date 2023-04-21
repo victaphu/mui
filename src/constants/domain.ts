@@ -42,6 +42,19 @@ export const domains: Domain[] = [
     sessionTimeout: 7200
   },
   {
+    id: 'testnet2',
+    downloadPrefix: 'https://test.sprect8.xyz/download/',
+    providerPrefix: 'https://test.sprect8.xyz',
+    apiUrl: 'https://test.sprect8.xyz/api',
+    ipfsUploadUrl: 'https://api.pinata.cloud/pinning',
+    ipfsReadUrl: 'https://ipfs.madnfts.io/ipfs/',
+    madReadUrl: 'https://json.madnfts.io/',
+    madSavePrefix: 'mad://',
+    ipfsSavePrefix: 'ipfs://',
+    defaultBaseUri: 'mad://',
+    sessionTimeout: 7200
+  },
+  {
     id: 'mainnet',
     downloadPrefix: 'https://v1.api.mainnet.madnfts.io/download/',
     providerPrefix: 'https://v1.api.mainnet.madnfts.io',
