@@ -42,6 +42,11 @@ export const networks: Network[] = [
         active: 1
       },
       {
+        environment: 'testnet2',
+        status: 1,
+        active: 1
+      },
+      {
         environment: 'local',
         status: 1,
         active: 1
@@ -106,6 +111,11 @@ export const networks: Network[] = [
         hidden: 1
       },
       {
+        environment: 'testnet2',
+        status: 1,
+        active: 1
+      },
+      {
         environment: 'local',
         status: 0,
         active: 1,
@@ -166,6 +176,11 @@ export const networks: Network[] = [
     environments: [
       {
         environment: 'testnet',
+        status: 1,
+        active: 1
+      },
+      {
+        environment: 'testnet2',
         status: 1,
         active: 1
       },
@@ -470,6 +485,11 @@ export const networks: Network[] = [
       },
       {
         environment: 'testnet',
+        status: 1,
+        active: 1
+      },
+      {
+        environment: 'testnet2',
         status: 1,
         active: 1
       },
