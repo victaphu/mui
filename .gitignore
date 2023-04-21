@@ -36,4 +36,4 @@ yarn-error.log*
 .env
 
 tsconfig.tsbuildinfo
-src/pages/api
+# src/pages/api
