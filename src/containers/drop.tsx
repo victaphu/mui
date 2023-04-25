@@ -98,7 +98,7 @@ const DropContainer = ({ Component, className }: CreateDropContainerComponent): 
     if (!createDropData.nft?.collection?.contract_id) return
     setDropActionState('syncing')
     await getData(
-      'sync/contract/nfts/' + createDropData.nft.collection.contract_id,
+      'sync/collection/nfts/' + createDropData.nft.collection.contract_id,
       null,
       true
     ).then(() => setDropActionState('idle'))

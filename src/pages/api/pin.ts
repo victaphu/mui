@@ -58,6 +58,7 @@ const route = async (req: Request, res: Response) => {
         })
         .promise()
     } catch (e) {
+      console.log('Failed to get object')
       log('mad:pin:s3', e, 'error')
     }
     // if (s3Stream && s3Stream.statusCode != 404) {
@@ -77,6 +78,7 @@ const route = async (req: Request, res: Response) => {
         res.status(200).json(result)
       })
       .catch((err) => {
+        console.log('Failed to get object', pinJson, typeof pinJson, pinFolder, key)
         res.status(500).json({ error: err.message })
       })
     // }
