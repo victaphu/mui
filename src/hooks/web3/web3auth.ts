@@ -16,24 +16,31 @@ export default function useWeb3Auth() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null)
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null)
   const [signer, setSigner] = useState<Web3Provider | null>(null)
+  const [active, setActive] = useState(false)
+  const [chainId, setChainId] = useState(0x13881)
+  const [error, setError] = useState<Error>(null)
 
   const [walletAddress, setWalletAddress] = useState('')
 
   const getAccounts = async (_signer: Web3Provider) => {
-    if (!provider) {
-      console.log('provider not initialized yet')
-      return
-    }
     const rpc = await _signer.getSigner()
     const address = await rpc.getAddress()
     console.log(address)
     setWalletAddress(address)
   }
 
+  const getChainId = async (_signer: Web3Provider) => {
+    const rpc = await _signer.getSigner()
+    const chainIdW3 = await rpc.getChainId()
+    console.log(chainIdW3)
+    setChainId(chainIdW3)
+  }
+
   const connect = async (container: string) => {
     try {
       console.log('connecting ...', web3auth)
       if (!web3auth) {
+        setActive(false)
         return
       }
       const web3provider = await web3auth.connect()
@@ -45,8 +52,11 @@ export default function useWeb3Auth() {
       setProvider(web3provider)
       setSigner(p)
       await getAccounts(p)
+      await getChainId(p)
       log('mad:web3auth:connect', container)
+      setActive(true)
     } catch (err) {
+      setActive(false)
       localStorage.connected = 'none'
       log('mad:web3auth:connect', err, 'error')
     }
@@ -137,12 +147,12 @@ export default function useWeb3Auth() {
   return {
     connect,
     account: walletAddress,
-    // active,
+    active,
     // activate,
     deactivate,
-    // chainId,
-    // error,
-    // setError,
+    chainId,
+    error,
+    setError,
     library: signer
   }
 }

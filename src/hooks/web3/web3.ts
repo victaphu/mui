@@ -43,9 +43,9 @@ export default function useWeb3() {
         setIsSocial(false)
         const containerSelected = container ? connectors[container] : connectors.injected
         await connectWithProvider(containerSelected)
-        localStorage.connected = 'yes'
-        localStorage.connectedType = container
       }
+      localStorage.connected = 'yes'
+      localStorage.connectedType = container
       log('mad:auth:connect', container)
     } catch (err) {
       localStorage.connected = 'none'
