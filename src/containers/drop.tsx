@@ -1,6 +1,5 @@
 // @typed v1
 import React, { useCallback, useEffect, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import { useDispatch, useSelector } from 'react-redux'
 import useTokenRouter from '../hooks/web3/router'
 import useCrudObjectApi from '../hooks/api/crudObject'
@@ -20,6 +19,7 @@ import useToken from '../hooks/web3/token'
 import useMarketplace from '../hooks/web3/marketplace'
 import { DropActionState } from '../types/nft'
 import { CreateDropContainerComponent } from '../types/containers'
+import useWeb3 from '../hooks/web3/web3'
 
 const DropContainer = ({ Component, className }: CreateDropContainerComponent): JSX.Element => {
   const dispatch = useDispatch()
@@ -32,7 +32,7 @@ const DropContainer = ({ Component, className }: CreateDropContainerComponent): 
   const marketplaceContract = useMarketplace()
   const [dropActionState, setDropActionState] = useState<DropActionState>('loading')
   const { getData } = useCrudObjectApi()
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
 
   const copyFromId = useCallback(
     async (id: string) => {

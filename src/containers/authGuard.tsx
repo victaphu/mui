@@ -23,19 +23,19 @@ import {
 import Wallet from '../components/wallet/wallet'
 import PopupWrapper from '../components/trader/popupWrapper'
 import { defaultNetwork, protectedPages } from '../constants/config'
-import { useWeb3React } from '@web3-react/core'
 import useAuth from '../hooks/web3/auth'
 import { findNetworkById, findNetworkByName, requestNetworkChange } from '../utils/network'
 import { networksVisible, supportedChains } from '../constants/network'
 import useToaster from '../hooks/toast'
 import { formatContractError } from '../utils/utils'
 import { log } from '../utils/log'
+import useWeb3 from '../hooks/web3/web3'
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
   // 1 - App state
   const dispatch = useDispatch()
   const router = useRouter()
-  const { account, active, chainId, error, library, setError } = useWeb3React()
+  const { account, active, chainId, error, library, setError } = useWeb3()
   const user = useSelector(getUser)
   const sessionTimeout = useSelector(getUserSession)
   const profile = useSelector(getUserProfile)

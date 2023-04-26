@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useWeb3React } from '@web3-react/core'
 import { Icon } from '@iconify/react'
 import { Nft } from '../../types/nft'
 import { tradeTypeAdded, tradeAssetAdded } from '../../store/trader'
@@ -19,6 +18,7 @@ import Link from '../common/link'
 import TimerComponent from '../common/timer'
 import { compareAndRequestNetworkChange, findNetworkById } from '../../utils/network'
 import { getCurrentNetwork } from '../../store/web3'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function Trader({
   nft,
@@ -31,7 +31,7 @@ export default function Trader({
 }): JSX.Element {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { account, library } = useWeb3React()
+  const { account, library } = useWeb3()
   const { ownerBalance, ownerOrder } = useNftOwner(nft)
   const { floorPrice, floorPriceExact, symbol } = useNftPrice(nft)
   const { inAuction, buyable, biddable, buttonText, latestOpenOrder } = useNftTradeState(nft)

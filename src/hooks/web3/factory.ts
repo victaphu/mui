@@ -11,11 +11,11 @@ import { getUserProfile } from '../../store/user'
 import { parseEther } from 'ethers'
 import { CallResponse, ContractAbi } from '../../types/global'
 import { getCurrentNetwork } from '../../store/web3'
-import { useWeb3React } from '@web3-react/core'
 import { log } from '../../utils/log'
+import useWeb3 from './web3'
 
 export default function useFactory() {
-  const { library } = useWeb3React()
+  const { library } = useWeb3()
   const creator = useSelector(getUserProfile)
   const network = useSelector(getCurrentNetwork)
   const toaster = useToaster()

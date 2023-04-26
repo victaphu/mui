@@ -4,8 +4,8 @@ import { changeNetwork, getCurrentNetwork } from '../../store/web3'
 import { requestNetworkChange } from '../../utils/network'
 import { networkDefault, networksVisible } from '../../constants/network'
 import Dropdown from '../form/dropdown'
-import { useWeb3React } from '@web3-react/core'
 import { Network } from '../../types/network'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function NetworkSelect({
   dropdownClassName
@@ -15,7 +15,7 @@ export default function NetworkSelect({
   const [calcCurrentNetwork, setCalcCurrentNetwork] = useState<Network>(null)
   const currentNetwork = useSelector(getCurrentNetwork)
   const dispatch = useDispatch()
-  const { library } = useWeb3React()
+  const { library } = useWeb3()
 
   useEffect(() => {
     setCalcCurrentNetwork(

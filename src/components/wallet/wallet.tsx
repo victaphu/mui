@@ -13,7 +13,6 @@ import {
 } from '../../store/web3'
 import { getUser } from '../../store/user'
 import Loader from '../common/loader'
-import { useWeb3React } from '@web3-react/core'
 import { Icon } from '@iconify/react'
 import Popup from '../common/popup'
 import { trimAddress } from '../../utils/utils'
@@ -26,6 +25,7 @@ import NetworkSelect from './networkSelect'
 import Transak from './transak'
 import Faucet from './faucet'
 import { protectedPages } from '../../constants/config'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function Wallet(): JSX.Element {
   // App state
@@ -35,9 +35,8 @@ export default function Wallet(): JSX.Element {
   const displayWallet = useSelector(getShowWallet)
   const web3AuthRequired = useSelector(getWeb3AuthRequired)
   const apiAuthRequired = useSelector(getApiAuthRequired)
-  const { account } = useWeb3React()
+  const { account, library } = useWeb3()
   const network = useSelector(getCurrentNetwork)
-  const { library } = useWeb3React()
 
   // Handle show the wallet based on store 'apiAuthRequired' || 'web3AuthRequired'
   useEffect(() => {

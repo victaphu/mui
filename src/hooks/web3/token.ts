@@ -15,16 +15,16 @@ import useToaster from '../toast'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getCurrentNetwork } from '../../store/web3'
-import { useWeb3React } from '@web3-react/core'
 import { CallResponse, ContractAbi } from '../../types/global'
 import usePayment from './payment'
 import useERC20 from './erc20'
 import { log } from '../../utils/log'
 import { fromWei } from 'web3-utils'
 import { parseEther } from 'ethers'
+import useWeb3 from './web3'
 
 export default function useToken() {
-  const { library } = useWeb3React()
+  const { library } = useWeb3()
   const network = useSelector(getCurrentNetwork)
   const toaster = useToaster()
   const { getBalance } = useERC20()

@@ -4,7 +4,6 @@ import Popup from '../common/popup'
 import Loader from '../common/loader'
 import cn from 'classnames'
 import useToaster from '../../hooks/toast'
-import { useWeb3React } from '@web3-react/core'
 import {
   getTradeAsset,
   getTraderStatus,
@@ -23,6 +22,7 @@ import { abbreviateNumber } from '../../utils/utils'
 import useCrudObjectApi from '../../hooks/api/crudObject'
 import { getCurrentNetwork } from '../../store/web3'
 import useToken from '../../hooks/web3/token'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function SellAuctionPopup({
   closePopup,
@@ -38,7 +38,7 @@ export default function SellAuctionPopup({
   const tokenContract = useToken()
   const tradeAsset = useSelector(getTradeAsset)
   const tradeAssetStatus = useSelector(getTraderStatus)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const { nftObject, setNft, resaleTreasuryFee, creatorRoyalty, resaleTotal } = useFeeCalculator()
   const { ownerBalance } = useNftOwner(tradeAsset)
   const network = useSelector(getCurrentNetwork)

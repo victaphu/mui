@@ -6,7 +6,6 @@ import Loader from '../components/common/loader'
 import { useSelector } from 'react-redux'
 import { getUserProfile } from '../store/user'
 import { getCurrentNetwork } from '../store/web3'
-import { useWeb3React } from '@web3-react/core'
 import Manager from '../components/manager/manager'
 import Button from '../components/form/button'
 import useCrudObjectApi from '../hooks/api/crudObject'
@@ -16,11 +15,12 @@ import DashboardAcademy from '../components/dataList/dashboardAcademy'
 import DashboardNfts from '../components/dataList/dashboardNfts'
 import DashboardCollections from '../components/dataList/dashboardCollections'
 import Banner from '../components/common/banner'
+import useWeb3 from '../hooks/web3/web3'
 
 const DashboardPage = (): JSX.Element => {
   const profile = useSelector(getUserProfile)
   const network = useSelector(getCurrentNetwork)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const { getData, dataLoading } = useCrudObjectApi()
   const [isManager, setIsManager] = useState<boolean>(false)
 

@@ -1,6 +1,5 @@
 // @typed v1
 import React, { useEffect, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import { trimAddress } from '../utils/utils'
 import { getCurrentNetwork } from '../store/web3'
@@ -22,6 +21,7 @@ import {
   NftContainerComponent
 } from '../types/containers'
 import useToaster from '../hooks/toast'
+import useWeb3 from '../hooks/web3/web3'
 
 const NftContainer = ({
   Component,
@@ -44,7 +44,7 @@ const NftContainer = ({
   const [burnable, setBurnable] = useState(false)
   const routerContract = useTokenRouter()
   const network = useSelector(getCurrentNetwork)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const { putData, getData } = useCrudObjectApi()
   const { postData, callUpdate } = useDataLikeObjectApi()
   const { ownerBalance, ownerOrder } = useNftOwner(nft)

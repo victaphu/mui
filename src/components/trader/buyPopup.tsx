@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Popup from '../common/popup'
 import { Nft, NftOrder } from '../../types/nft'
-import { useWeb3React } from '@web3-react/core'
 import useMarketplace from '../../hooks/web3/marketplace'
 import { getTraderStatus, statusUpdated, tradeAssetDeleted } from '../../store/trader'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,6 +17,7 @@ import Price from '../common/price'
 import ConnectButton from '../wallet/button'
 import { getCurrentNetwork } from '../../store/web3'
 import { compareAndRequestNetworkChange, findNetworkById } from '../../utils/network'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function BuyPopup({
   buyData,
@@ -27,7 +27,7 @@ export default function BuyPopup({
   closePopup: () => Promise<void>
 }): JSX.Element {
   const dispatch = useDispatch()
-  const { account, library } = useWeb3React()
+  const { account, library } = useWeb3()
   const network = useSelector(getCurrentNetwork)
   const marketplace = useMarketplace()
   const toaster = useToaster()

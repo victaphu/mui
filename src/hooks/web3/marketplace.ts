@@ -8,12 +8,12 @@ import { useSelector } from 'react-redux'
 import { getUserProfile } from '../../store/user'
 import { CallResponse, ContractAbi } from '../../types/global'
 import { getCurrentNetwork } from '../../store/web3'
-import { useWeb3React } from '@web3-react/core'
 import usePayment from './payment'
 import { log } from '../../utils/log'
+import useWeb3 from './web3'
 
 export default function useMarketplace() {
-  const { library } = useWeb3React()
+  const { library } = useWeb3()
   const network = useSelector(getCurrentNetwork)
   const trader = useSelector(getUserProfile)
   const { approvePayer, errorResponse, successResponse } = usePayment()

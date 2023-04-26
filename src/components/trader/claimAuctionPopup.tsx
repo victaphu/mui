@@ -3,7 +3,6 @@ import Popup from '../common/popup'
 import { Nft, NftOrder } from '../../types/nft'
 import { useDispatch, useSelector } from 'react-redux'
 import useNftPrice from '../../hooks/nftPrice'
-import { useWeb3React } from '@web3-react/core'
 import useMarketplace from '../../hooks/web3/marketplace'
 import useToaster from '../../hooks/toast'
 import { getTraderStatus, statusUpdated, tradeAssetDeleted } from '../../store/trader'
@@ -13,6 +12,7 @@ import Loader from '../common/loader'
 import useCrudObjectApi from '../../hooks/api/crudObject'
 import cn from 'classnames'
 import { useRouter } from 'next/router'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function ClaimAuctionPopup({
   claimData,
@@ -25,7 +25,7 @@ export default function ClaimAuctionPopup({
 }): JSX.Element {
   const dispatch = useDispatch()
   const { floorPrice } = useNftPrice(claimData)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const { getData } = useCrudObjectApi()
 
   const marketplace = useMarketplace()

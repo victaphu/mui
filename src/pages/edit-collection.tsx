@@ -1,6 +1,5 @@
 import { Collection } from '../types/collection'
 import React, { useEffect, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { collectionTypes, mintingTypes } from '../constants/config'
@@ -44,10 +43,11 @@ import Withdraw from '../components/minter/withdraw'
 import { log } from '../utils/log'
 import useFuel from '../hooks/web3/fuel'
 import { getCurrentNetwork } from '../store/web3'
+import useWeb3 from '../hooks/web3/web3'
 
 const EditCollectionPage = (): JSX.Element => {
   const dispatch = useDispatch()
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const network = useSelector(getCurrentNetwork)
   const profile = useSelector(getUserProfile)
   const router = useRouter()

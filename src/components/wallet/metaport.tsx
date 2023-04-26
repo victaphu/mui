@@ -13,8 +13,8 @@ import Loader from '../common/loader'
 import { MetaportConfig } from '@skalenetwork/metaport/build/core/interfaces'
 import { findNetworkById, requestNetworkChange } from '../../utils/network'
 import { environment } from '../../constants/config'
-import { useWeb3React } from '@web3-react/core'
 import Input from '../form/input'
+import useWeb3 from '../../hooks/web3/web3'
 
 declare enum TokenType {
   eth = 'eth',
@@ -35,7 +35,7 @@ export default function MetaportComponent({ className }: { className?: string })
   const [loadingPow, setLoadingPow] = useState<boolean>(false)
   const elRef = useRef<HTMLDivElement>(null)
   const { pow } = useFuel()
-  const { library } = useWeb3React()
+  const { library } = useWeb3()
 
   const transfer = (
     from: string,

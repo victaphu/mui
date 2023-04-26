@@ -4,7 +4,6 @@ import { Icon } from '@iconify/react'
 import Loader from '../common/loader'
 import { Collection } from '../../types/collection'
 import useToken from '../../hooks/web3/token'
-import { useWeb3React } from '@web3-react/core'
 import useTimer from '../../hooks/timer'
 import Button from '../form/button'
 import NftCardComponent from '../nft/nftCard'
@@ -15,6 +14,7 @@ import Balance from '../wallet/balance'
 import ConnectButton from '../wallet/button'
 import WrongNetwork from '../common/wrongNetwork'
 import { findNetworkById } from '../../utils/network'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function MintNow({
   collection,
@@ -29,7 +29,7 @@ export default function MintNow({
   const [mintState, setMintState] = useState<string>('idle')
   const [mintedNft, setMintedNft] = useState<Nft>(null)
   const tokenContract = useToken()
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const timer = useTimer()
   const network = useSelector(getCurrentNetwork)
 

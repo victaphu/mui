@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
 import { formatImageUrl } from '../../utils/utils'
 import { Icon } from '@iconify/react'
@@ -15,13 +14,14 @@ import Link from './link'
 import ConnectButton from '../wallet/button'
 import NetworkSelect from '../wallet/networkSelect'
 import { createDropUpdated } from '../../store/createDrop'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function Navigation(): JSX.Element {
   // 1 - App state
   const auth = useAuth()
   const dispatch = useDispatch()
   const router = useRouter()
-  const { active } = useWeb3React()
+  const { active } = useWeb3()
   const profile = useSelector(getUserProfile)
 
   const { theme, setTheme } = useTheme()

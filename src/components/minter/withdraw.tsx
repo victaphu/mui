@@ -9,14 +9,14 @@ import Info from '../form/info'
 import { Tooltip } from '../toolTip/toolTip'
 import { Icon } from '@iconify/react'
 import Button from '../form/button'
-import { useWeb3React } from '@web3-react/core'
 import useRouter from '../../hooks/web3/router'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function Withdraw({ collection }: { collection: Collection }): JSX.Element {
   const network = useSelector(getCurrentNetwork)
   const tokenContract = useToken()
   const router = useRouter()
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const [loaded, setLoaded] = useState<boolean>(false)
   const [withdrawing, setWithdrawing] = useState<boolean>(false)
   const [balances, setBalances] = useState(null)

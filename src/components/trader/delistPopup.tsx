@@ -6,10 +6,10 @@ import { getTradeAsset, getTraderStatus, statusUpdated, tradeTypeAdded } from '.
 import useToaster from '../../hooks/toast'
 import Loader from '../common/loader'
 import useMarketplace from '../../hooks/web3/marketplace'
-import { useWeb3React } from '@web3-react/core'
 import useCrudObjectApi from '../../hooks/api/crudObject'
 import { useRouter } from 'next/router'
 import Button from '../form/button'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function DelistPopup({
   closePopup
@@ -19,7 +19,7 @@ export default function DelistPopup({
   const tradeAsset = useSelector(getTradeAsset)
   const dispatch = useDispatch()
   const marketplace = useMarketplace()
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const toaster = useToaster()
   const tradeAssetStatus = useSelector(getTraderStatus)
   const { getData } = useCrudObjectApi()

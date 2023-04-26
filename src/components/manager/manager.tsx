@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Button from '../form/button'
 import Input from '../form/input'
 import useRouter from '../../hooks/web3/router'
-import { useWeb3React } from '@web3-react/core'
 import { collectionTypes, contractVersions } from '../../constants/config'
 import Dropdown from '../form/dropdown'
 import { Icon } from '@iconify/react'
 import { useSelector } from 'react-redux'
 import { getUserProfile } from '../../store/user'
+import useWeb3 from '../../hooks/web3/web3'
 
 const Manager = (): JSX.Element => {
   const [contractVersion, setContractVersion] = useState<'0.9' | '1.0' | ''>('')
@@ -17,7 +17,7 @@ const Manager = (): JSX.Element => {
   const [error, setError] = useState<boolean>(false)
   const router = useRouter()
   const profile = useSelector(getUserProfile)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
 
   const submitMintFee = async () => {
     await router.setMintFees(account, mintFee, '0')

@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux'
 import { getCurrentNetwork } from '../../store/web3'
 import { Network } from '../../types/network'
 import { requestNetworkChange } from '../../utils/network'
-import { useWeb3React } from '@web3-react/core'
 import Button from '../form/button'
 import ConnectButton from '../wallet/button'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function WrongNetwork({
   compareNetwork,
@@ -15,7 +15,7 @@ export default function WrongNetwork({
   compareNetwork: Network
   message?: string
 }): JSX.Element {
-  const { account, library } = useWeb3React()
+  const { account, library } = useWeb3()
   const network = useSelector(getCurrentNetwork)
   const [showMessage, setShowMessage] = useState<boolean>(false)
   useEffect(() => {

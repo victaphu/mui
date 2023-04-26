@@ -1,6 +1,5 @@
 // @typed - MH
 import React, { useEffect, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import transakSDK from '@transak/transak-sdk'
 import { Icon } from '@iconify/react'
 import Button from '../form/button'
@@ -8,10 +7,11 @@ import List from '../common/list'
 import { log } from '../../utils/log'
 import { useSelector } from 'react-redux'
 import { getCurrentNetwork } from '../../store/web3'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function Transak({ className }: { className?: string }): JSX.Element {
   const network = useSelector(getCurrentNetwork)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const [transak, setTransak] = useState(null)
 
   useEffect(() => {

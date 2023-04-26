@@ -5,8 +5,8 @@ import { abbreviateNumber, formatImageUrl } from '../../utils/utils'
 import { Collection } from '../../types/collection'
 import CollectionActions from './collectionActions'
 import CollectionIcons from './collectionIcons'
-import { useWeb3React } from '@web3-react/core'
 import Price from '../common/price'
+import useWeb3 from '../../hooks/web3/web3'
 
 const CollectionCardComponent = ({
   collection,
@@ -16,7 +16,7 @@ const CollectionCardComponent = ({
   className?: string
 }): JSX.Element => {
   const collectionLink = `/collection/${collection.contract_id}`
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
 
   return (
     <div className={className}>

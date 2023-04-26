@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getCurrentNetwork } from '../../store/web3'
 import { getNetworkBalance } from '../../utils/network'
-import { useWeb3React } from '@web3-react/core'
 import { Icon } from '@iconify/react'
 import { abbreviateNumber } from '../../utils/utils'
 import useERC20 from '../../hooks/web3/erc20'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function Balance(): JSX.Element {
-  const { account, library } = useWeb3React()
+  const { account, library } = useWeb3()
   const network = useSelector(getCurrentNetwork)
   const erc20 = useERC20()
 

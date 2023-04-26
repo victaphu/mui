@@ -4,10 +4,10 @@ import CollectionActions from './collectionActions'
 import Link from '../common/link'
 import { Icon } from '@iconify/react'
 import Loader from '../common/loader'
-import { useWeb3React } from '@web3-react/core'
 import { abbreviateNumber, formatDate, trimSentence } from '../../utils/utils'
 import Popup from '../common/popup'
 import Price from '../common/price'
+import useWeb3 from '../../hooks/web3/web3'
 
 const CollectionDetailCard = ({
   collection,
@@ -18,7 +18,7 @@ const CollectionDetailCard = ({
 }): JSX.Element => {
   const [editable, setEditable] = useState(false)
   const [descriptionPopup, setDescriptionPopup] = useState(false)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
 
   const handleReadMore = () => {
     setDescriptionPopup(!descriptionPopup)

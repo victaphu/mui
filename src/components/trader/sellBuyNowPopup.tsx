@@ -10,7 +10,6 @@ import {
   tradeAssetUpdated,
   tradeTypeAdded
 } from '../../store/trader'
-import { useWeb3React } from '@web3-react/core'
 import useToaster from '../../hooks/toast'
 import Loader from '../common/loader'
 import useFeeCalculator from '../../hooks/feeCalculator'
@@ -23,6 +22,7 @@ import useCrudObjectApi from '../../hooks/api/crudObject'
 import { getCurrentNetwork } from '../../store/web3'
 import useToken from '../../hooks/web3/token'
 import Button from '../form/button'
+import useWeb3 from '../../hooks/web3/web3'
 
 export default function SellBuyNowPopup({
   closePopup,
@@ -38,7 +38,7 @@ export default function SellBuyNowPopup({
   const tokenContract = useToken()
   const tradeAsset = useSelector(getTradeAsset)
   const tradeAssetStatus = useSelector(getTraderStatus)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const { nftObject, setNft, resaleTreasuryFee, creatorRoyalty, resaleTotal } = useFeeCalculator()
   const { ownerBalance } = useNftOwner(tradeAsset)
   const { getData } = useCrudObjectApi()

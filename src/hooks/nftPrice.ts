@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Nft } from '../types/nft'
-import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import { getCurrentNetwork } from '../store/web3'
+import useWeb3 from './web3/web3'
 
 export default function useNftPrice(nft: Nft): {
   floorPrice: number
@@ -24,7 +24,7 @@ export default function useNftPrice(nft: Nft): {
   const [symbol, setSymbol] = useState<string>('ONE')
   const [priceAction, setPriceAction] = useState<boolean>(null)
   const [priceActionChange, setPriceActionChange] = useState<number>(null)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
   const network = useSelector(getCurrentNetwork)
 
   useEffect(() => {

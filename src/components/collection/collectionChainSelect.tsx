@@ -7,7 +7,7 @@ import { environment } from '../../constants/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeNetwork, getCurrentNetwork } from '../../store/web3'
 import { requestNetworkChange } from '../../utils/network'
-import { useWeb3React } from '@web3-react/core'
+import useWeb3 from '../../hooks/web3/web3'
 export default function CollectionChainSelect({
   allowSelection,
   selectedChain,
@@ -19,7 +19,7 @@ export default function CollectionChainSelect({
 }): JSX.Element {
   const [currentChain, setCurrentChain] = useState<Network>()
   const currentNetwork = useSelector(getCurrentNetwork)
-  const { library } = useWeb3React()
+  const { library } = useWeb3()
   const dispatch = useDispatch()
 
   useEffect(() => {

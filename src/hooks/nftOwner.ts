@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Nft, NftBalance, NftOrder } from '../types/nft'
-import { useWeb3React } from '@web3-react/core'
+import useWeb3 from './web3/web3'
 
 export default function useNftOwner(nft: Nft): {
   ownerBalance: NftBalance
@@ -8,7 +8,7 @@ export default function useNftOwner(nft: Nft): {
 } {
   const [ownerBalance, setOwnerBalance] = useState<NftBalance>(null)
   const [ownerOrder, setOwnerOrder] = useState<NftOrder>(null)
-  const { account } = useWeb3React()
+  const { account } = useWeb3()
 
   useEffect(() => {
     if (account && nft && nft.orders) {

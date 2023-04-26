@@ -1,4 +1,3 @@
-import { useWeb3React } from '@web3-react/core'
 import Web3 from 'web3'
 import BN from 'bn.js'
 import crypto from 'crypto'
@@ -8,13 +7,14 @@ import { backgroundFuelAdded, getBackgroundFuel, getCurrentNetwork } from '../..
 import { getUserProfile } from '../../store/user'
 import { log } from '../../utils/log'
 import { getNetworkBalance } from '../../utils/network'
+import useWeb3 from './web3'
 
 export default function useFuel() {
   const network = useSelector(getCurrentNetwork)
   const profile = useSelector(getUserProfile)
   const backgroundFuel = useSelector(getBackgroundFuel)
   const dispatch = useDispatch()
-  const { account, library } = useWeb3React()
+  const { account, library } = useWeb3()
   const DIFFICULTY = new BN(1)
 
   const createAddress = async (web3): Promise<{ address: string; privateKey: string }> => {
