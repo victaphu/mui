@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import useAuth from '../../hooks/web3/auth'
 import { isMetaMaskInstalled } from '../../utils/network'
 import { Icon } from '@iconify/react'
@@ -11,6 +11,10 @@ export default function Connector(): JSX.Element {
   const connect = async (container) => {
     await auth.connect(container)
   }
+
+  useEffect(() => {
+    console.log('Account changed?', account)
+  }, [account])
 
   return (
     <>

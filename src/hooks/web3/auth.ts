@@ -7,12 +7,15 @@ import { log } from '../../utils/log'
 import useWeb3 from './web3'
 
 export default function useAuth() {
-  const { deactivate, connect } = useWeb3()
+  const w3 = useWeb3()
+  const { deactivate, connect } = w3
   const [disconnecting, setDisconnecting] = useState(false)
   const logoutStatus = useSelector(getUserLogoutStatus)
   const apiAuthRequired = useSelector(getApiAuthRequired)
   const dispatch = useDispatch()
   const router = useRouter()
+
+  console.log(w3, 'changed')
 
   // const connectWithProvider = async (connector) => {
   //   console.log(activate, connector)

@@ -144,11 +144,13 @@ export default function useWeb3Auth() {
     activate()
   }, [])
 
+  console.log(walletAddress, active, chainId, error)
+
   return {
     connect,
     account: walletAddress,
     active,
-    // activate,
+    activate,
     deactivate,
     chainId,
     error,

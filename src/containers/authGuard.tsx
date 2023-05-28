@@ -79,6 +79,7 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
 
   // Handles web3 'active' and store 'apiAuthRequired' / 'web3AuthRequired' and displays modals based on these
   useEffect(() => {
+    console.log('signing in with stuff ...')
     const signWithApi = async (address) => {
       try {
         const signatureResponse = await dispatch(getSignatureAsync({ address }))
