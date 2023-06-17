@@ -6,13 +6,13 @@ import { useRouter } from 'next/router'
 import { log } from '../../utils/log'
 // import useWeb3 from './web3'
 import { useConnect, useDisconnect } from 'wagmi'
-import { injected } from '../../utils/connectors'
+import connectors, { injected } from '../../utils/connectors'
 
 export default function useAuth() {
   // const w3 = useWeb3()
   // const { deactivate, connect } = w3
-  const { disconnectAsync: disconnect } = useDisconnect()
-  const { connectAsync: connect } = useConnect({
+  const { disconnectAsync } = useDisconnect()
+  const { connectAsync } = useConnect({
     connector: injected
   })
   const [disconnecting, setDisconnecting] = useState(false)
@@ -21,35 +21,47 @@ export default function useAuth() {
   const dispatch = useDispatch()
   const router = useRouter()
 
-  // console.log(w3, 'changed')
+  const connectWithProvider = async (connector) => {
+    // await activate(connector)
+    await connectAsync({
+      connector
+    })
+  }
 
-  // const connectWithProvider = async (connector) => {
-  //   console.log(activate, connector)
-  //   await activate(connector)
-  // }
+  const disconnect = async () => {
+    setDisconnecting(true)
+    log('mad:auth:disconnect', '')
+  }
 
-  // const connect = async (container: string) => {
-  //   try {
-  //     const containerSelected = container ? connectors[container] : connectors.injected
-  //     await connectWithProvider(containerSelected)
-  //     localStorage.connected = 'yes'
-  //     localStorage.connectedType = container
-  //     log('mad:auth:connect', container)
-  //   } catch (error) {
-  //     localStorage.connected = 'none'
-  //     log('mad:auth:connect', error, 'error')
-  //   }
-  // }
-
-  // const disconnect = async () => {
-  //   setDisconnecting(true)
-  //   log('mad:auth:disconnect', '')
-  // }
+  const connect = async (container: string) => {
+    try {
+      // if (container === 'social') {
+      //   // console.log(container)
+      //   if (active) {
+      //     web3Auth.deactivate()
+      //   }
+      //   await web3Auth.connect(container)
+      //   console.log('>>> set web3 social', web3Auth)
+      //   // setWeb3({ ...web3Auth, connect, disconnect })
+      //   setIsSocial(true)
+      // } else {
+      // setIsSocial(false)
+      const containerSelected = container ? connectors[container] : connectors.injected
+      await connectWithProvider(containerSelected)
+      // }
+      localStorage.connected = 'yes'
+      localStorage.connectedType = container
+      log('mad:auth:connect', container)
+    } catch (err) {
+      localStorage.connected = 'none'
+      log('mad:auth:connect', err, 'error')
+    }
+  }
 
   useEffect(() => {
     log('mad:auth:useEffect', '', 'info')
     if (disconnecting && logoutStatus === 'pending') {
-      disconnect()
+      disconnectAsync()
       localStorage.connected = 'none'
       localStorage.connectedType = null
       if (!apiAuthRequired) {
@@ -59,8 +71,13 @@ export default function useAuth() {
         setDisconnecting(false)
       })
     }
-  }, [logoutStatus, apiAuthRequired, dispatch, router, disconnect, disconnecting])
-
+  }, [
+    logoutStatus,
+    apiAuthRequired,
+    dispatch,
+    router,
+    disconnecting
+  ])
   return {
     connect,
     disconnect,
