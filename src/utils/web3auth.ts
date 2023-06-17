@@ -4,7 +4,8 @@ import { Chain } from 'wagmi'
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
-const clientId = 'BM_UR18KDju5ZqxoqfNR42ufXCsWx437bAtjI5Oj6YgqAcKdqTR9q3Jiq8LsExBtgvu0wqI-Lda6oMeeWKGOOyA'
+const clientId =
+  'BM_UR18KDju5ZqxoqfNR42ufXCsWx437bAtjI5Oj6YgqAcKdqTR9q3Jiq8LsExBtgvu0wqI-Lda6oMeeWKGOOyA'
 
 export default function Web3AuthConnectorInstance(chains: Chain[]) {
   // Create Web3Auth Instance
@@ -17,7 +18,7 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
     displayName: chains[0].name,
     tickerName: chains[0].nativeCurrency?.name,
     ticker: chains[0].nativeCurrency?.symbol,
-    blockExplorer: chains[0].blockExplorers?.default.url[0] as string,
+    blockExplorer: chains[0].blockExplorers?.default.url[0] as string
   }
   const web3AuthInstance = new Web3Auth({
     clientId,
@@ -28,10 +29,10 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
       loginMethodsOrder: ['google'],
       defaultLanguage: 'en',
       appLogo: iconUrl,
-      modalZIndex: '2147483647',
+      modalZIndex: '2147483647'
     },
     web3AuthNetwork: 'testnet',
-    enableLogging: true,
+    enableLogging: true
   })
   const privateKeyProvider = new EthereumPrivateKeyProvider({ config: { chainConfig } });
   const openloginAdapterInstance = new OpenloginAdapter({
@@ -44,7 +45,7 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
         logoLight: iconUrl,
         logoDark: iconUrl,
         defaultLanguage: 'en',
-        dark: true,
+        dark: true
       },
       loginConfig: {
         google: {
@@ -54,13 +55,13 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
           clientId: '125971468645-acluenumtcs9s3m7qcshtmgvfkcgsoj6.apps.googleusercontent.com'
         }
       }
-    },
+    }
   })
   web3AuthInstance.configureAdapter(openloginAdapterInstance);
   return new Web3AuthConnector({
     chains: chains as any,
     options: {
-      web3AuthInstance,
-    },
+      web3AuthInstance
+    }
   })
 }
