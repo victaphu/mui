@@ -60,6 +60,7 @@ export default function useAuth() {
 
   useEffect(() => {
     log('mad:auth:useEffect', '', 'info')
+    console.log('mad nft use effect - disconnecting or something i guess')
     if (disconnecting && logoutStatus === 'pending') {
       disconnectAsync()
       localStorage.connected = 'none'
@@ -76,7 +77,10 @@ export default function useAuth() {
     apiAuthRequired,
     dispatch,
     router,
-    disconnecting
+    disconnecting,
+    disconnectAsync,
+    logoutUserAsync,
+    setDisconnecting
   ])
   return {
     connect,
