@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import React, { useRef } from 'react'
 import Link from '../common/link'
 import { Tooltip } from './toolTip'
-import { log } from '../../utils/log'
+// import { log } from '../../utils/log'
 
 export const ToolTipVideo = ({
   placement = 'top',

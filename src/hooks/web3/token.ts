@@ -44,9 +44,7 @@ export default function useToken() {
    */
   useEffect(() => {
     log('mad:token:useEffect', '', 'info')
-    if (!network || !connector || !contractType || !contractAddress || tokenType === null)
-      return
-
+    if (!network || !connector || !contractType || !contractAddress || tokenType === null) return
     setLoaded(false)
     const Abi = {
       ERC721Minimal,
@@ -427,14 +425,14 @@ export default function useToken() {
         response: {
           erc20: network.currency.erc20
             ? parseFloat(
-                (
-                  parseInt(
-                    await splitterContract.methods
-                      .releasable(network.currency.erc20, ownerAddress)
-                      .call()
-                  ) / 10e17
-                ).toString()
-              )
+              (
+                parseInt(
+                  await splitterContract.methods
+                    .releasable(network.currency.erc20, ownerAddress)
+                    .call()
+                ) / 10e17
+              ).toString()
+            )
             : 0,
           native: parseFloat(await splitterContract.methods.releasable(ownerAddress).call())
         }

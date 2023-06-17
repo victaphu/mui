@@ -41,7 +41,7 @@ import Button from '../components/form/button'
 import DropdownCollection from '../components/form/dropdownCollection'
 import Withdraw from '../components/minter/withdraw'
 import { log } from '../utils/log'
-import useFuel from '../hooks/web3/fuel'
+// import useFuel from '../hooks/web3/fuel'
 import { getCurrentNetwork } from '../store/web3'
 import { useAccount } from 'wagmi'
 
