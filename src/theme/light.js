@@ -6,4 +6,4 @@ const lightTheme = {
   colors: colors.light
 }
 
-module.exports = lightTheme;
+module.exports = lightTheme

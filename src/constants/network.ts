@@ -698,7 +698,7 @@ networksAvailable.map((n) => (walletConnectNetworks[n.id] = n.rpcUrl))
 export const supportedChains: number[] = networksAvailable.map((a) => a.id)
 export const supportedChainsWalletConnect = walletConnectNetworks
 
-export const wagmiAdapters: Chain[] = networksVisible.map((network: Network) : Chain => {
+export const wagmiAdapters: Chain[] = networksVisible.map((network: Network): Chain => {
   return {
     id: network.id,
     name: network.name,
@@ -710,6 +710,6 @@ export const wagmiAdapters: Chain[] = networksVisible.map((network: Network) : C
     },
     blockExplorers: {
       default: { name: 'Explorer', url: network.explorerUrl }
-    },
+    }
   }
 })

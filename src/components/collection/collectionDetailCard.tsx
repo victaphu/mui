@@ -18,7 +18,7 @@ const CollectionDetailCard = ({
 }): JSX.Element => {
   const [editable, setEditable] = useState(false)
   const [descriptionPopup, setDescriptionPopup] = useState(false)
-  const { address : account } = useAccount()
+  const { address: account } = useAccount()
 
   const handleReadMore = () => {
     setDescriptionPopup(!descriptionPopup)

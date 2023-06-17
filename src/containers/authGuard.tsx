@@ -114,7 +114,7 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
       !signingWithApi &&
       apiAuthRequired === true &&
       (error?.message?.includes('Unsupported chain id:') ||
-      err?.message?.includes('Unsupported chain id:'))
+        err?.message?.includes('Unsupported chain id:'))
     ) {
       log('mad:authGuard:UnsupportedChainIdError', '', 'error')
       // @ts-ignore
@@ -131,7 +131,13 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
       setSigningWithApi(true)
       signWithApi(account).then()
     }
-    if (!error && !err && account && profile && account?.toLowerCase() !== profile?.creator_address) {
+    if (
+      !error &&
+      !err &&
+      account &&
+      profile &&
+      account?.toLowerCase() !== profile?.creator_address
+    ) {
       setError({
         name: 'Incorrect account',
         message: `You are connected to a different from your current profile. Switch back to ${profile.creator_address} in your wallet or logout and reconnect`

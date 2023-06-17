@@ -7,7 +7,8 @@ import { environment } from '../../constants/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeNetwork, getCurrentNetwork } from '../../store/web3'
 import { requestNetworkChange } from '../../utils/network'
-import { useNetwork, useSwitchNetwork } from 'wagmi'
+import { useAccount } from 'wagmi'
+// import useWeb3 from '../../hooks/web3/web3'
 export default function CollectionChainSelect({
   allowSelection,
   selectedChain,
@@ -19,8 +20,9 @@ export default function CollectionChainSelect({
 }): JSX.Element {
   const [currentChain, setCurrentChain] = useState<Network>()
   const currentNetwork = useSelector(getCurrentNetwork)
-  const { chain } = useNetwork()
-  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  // const { chain } = useNetwork()
+  // const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  const { connector } = useAccount()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -39,16 +41,15 @@ export default function CollectionChainSelect({
             <div
               onMouseEnter={() => (chain.id ? setCurrentChain(chain) : null)}
               onMouseLeave={() => setCurrentChain(currentNetwork)}
-              onClick={() => {
+              onClick={async () => {
                 if (
                   chain.environments.find((b) => b.environment === environment && b.active === 1)
                 ) {
-                  // if (library && library?.provider) {
-                  //   requestNetworkChange(library.provider, chain).then()
-                  // } else {
-                  //   dispatch(changeNetwork(chain))
-                  // }
-                  switchNetwork(chain.id)
+                  if (connector) {
+                    requestNetworkChange(await connector.getProvider(), chain).then()
+                  } else {
+                    dispatch(changeNetwork(chain))
+                  }
                 }
               }}
               key={chain.id}

@@ -13,16 +13,13 @@ import store from '../store/store'
 import { AuthGuard } from '../containers/authGuard'
 import { getCookieConsentValue } from 'react-cookie-consent'
 import { ThemeProvider } from 'next-themes'
-import { WagmiConfig, configureChains, createConfig } from 'wagmi' 
+import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 import { wagmiAdapters } from '../constants/network'
 
 const cookieStatus = getCookieConsentValue('MADNFTsCookieStatus')
 
-const { chains, publicClient } = configureChains(
-  wagmiAdapters,
-  [publicProvider()]
-)
+const { publicClient } = configureChains(wagmiAdapters, [publicProvider()])
 
 const config = createConfig({
   autoConnect: true,

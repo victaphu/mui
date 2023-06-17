@@ -6,4 +6,4 @@ const darkTheme = {
   colors: colors.dark
 }
 
-module.exports = darkTheme;
+module.exports = darkTheme
