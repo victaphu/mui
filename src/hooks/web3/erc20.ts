@@ -9,10 +9,10 @@ import { CallResponse, ContractAbi } from '../../types/global'
 import { parseEther } from 'ethers'
 import { log } from '../../utils/log'
 import { fromWei } from 'web3-utils'
-import useWeb3 from './web3'
+import { useAccount } from 'wagmi'
 
 export default function useERC20() {
-  const { library } = useWeb3()
+  const { connector } = useAccount()
   const network = useSelector(getCurrentNetwork)
   const toaster = useToaster()
   const errorResponse = (error: Error, message?: string): CallResponse => {
@@ -33,12 +33,17 @@ export default function useERC20() {
    */
   useEffect(() => {
     log('mad:erc20:useEffect', '', 'info')
-    if (!network || !library?.provider || !network?.currency?.erc20) return
-    const web3 = new Web3(library?.provider)
+    if (!network || !connector || !network?.currency?.erc20) return
+
+    connector.getProvider().then(provider => {
+      const web3 = new Web3(provider)
+                
+      // @ts-ignore
+      setErc20Contract(new web3.eth.Contract(ERC20.abi, network.currency.erc20))
+      setLoaded(true)
+    })
     // @ts-ignore
-    setErc20Contract(new web3.eth.Contract(ERC20.abi, network.currency.erc20))
-    setLoaded(true)
-  }, [library, network])
+  }, [connector, network])
 
   /////////////////////////////////////////////
   // PUBLIC METHODS
@@ -52,7 +57,7 @@ export default function useERC20() {
   const getBalance = async (address: string): Promise<CallResponse> => {
     log('mad:erc20:getBalance', address)
     try {
-      const web3 = new Web3(library.provider)
+      const web3 = new Web3(await connector.getProvider())
       const balance = await erc20Contract.methods.balanceOf(address).call()
       return {
         error: null,

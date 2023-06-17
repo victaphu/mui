@@ -9,7 +9,7 @@ import useMarketplace from '../../hooks/web3/marketplace'
 import useCrudObjectApi from '../../hooks/api/crudObject'
 import { useRouter } from 'next/router'
 import Button from '../form/button'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function DelistPopup({
   closePopup
@@ -19,7 +19,7 @@ export default function DelistPopup({
   const tradeAsset = useSelector(getTradeAsset)
   const dispatch = useDispatch()
   const marketplace = useMarketplace()
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const toaster = useToaster()
   const tradeAssetStatus = useSelector(getTraderStatus)
   const { getData } = useCrudObjectApi()

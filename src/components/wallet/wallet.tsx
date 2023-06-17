@@ -25,7 +25,7 @@ import NetworkSelect from './networkSelect'
 import Transak from './transak'
 import Faucet from './faucet'
 import { protectedPages } from '../../constants/config'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function Wallet(): JSX.Element {
   // App state
@@ -35,7 +35,7 @@ export default function Wallet(): JSX.Element {
   const displayWallet = useSelector(getShowWallet)
   const web3AuthRequired = useSelector(getWeb3AuthRequired)
   const apiAuthRequired = useSelector(getApiAuthRequired)
-  const { account, library } = useWeb3()
+  const { address: account, connector } = useAccount()
   const network = useSelector(getCurrentNetwork)
 
   // Handle show the wallet based on store 'apiAuthRequired' || 'web3AuthRequired'
@@ -134,9 +134,9 @@ export default function Wallet(): JSX.Element {
                 {network?.currency?.erc20 && (
                   <span
                     className="border-0 text-xs cursor-pointer hover:text-madPink underline mt-5 mx-2 mb-0 inline-block"
-                    onClick={() =>
+                    onClick={async () =>
                       requestAddAsset(
-                        library.provider,
+                        await connector.getProvider(),
                         network?.currency?.erc20,
                         network?.currency?.erc20Symbol,
                         network?.currency?.decimals

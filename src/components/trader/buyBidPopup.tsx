@@ -17,7 +17,7 @@ import Price from '../common/price'
 import { getCurrentNetwork } from '../../store/web3'
 import ConnectButton from '../wallet/button'
 import { compareAndRequestNetworkChange, findNetworkById } from '../../utils/network'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function BuyBidPopup({
   bidData,
@@ -28,7 +28,7 @@ export default function BuyBidPopup({
 }): JSX.Element {
   const dispatch = useDispatch()
   const { floorPrice, floorPriceExact } = useNftPrice(bidData)
-  const { account, library } = useWeb3()
+  const { address: account, connector } = useAccount()
   const { getData } = useCrudObjectApi()
   const [minPrice, setMinPrice] = useState<number>(0)
   const router = useRouter()
@@ -61,7 +61,7 @@ export default function BuyBidPopup({
   const bid = async () => {
     dispatch(statusUpdated('pending'))
     await compareAndRequestNetworkChange(
-      library?.provider,
+      await connector?.getProvider(),
       dispatch,
       network,
       findNetworkById(bidData?.collection?.chain)

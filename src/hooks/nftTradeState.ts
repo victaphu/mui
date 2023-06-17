@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Nft, NftOrder } from '../types/nft'
-import useWeb3 from './web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function useNftTradeState(nft: Nft): {
   inAuction: boolean
@@ -14,7 +14,7 @@ export default function useNftTradeState(nft: Nft): {
   const [biddable, setBiddable] = useState(false)
   const [buttonText, setButtonText] = useState('View')
   const [latestOpenOrder, setLatestOpenOrder] = useState(null)
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
 
   useEffect(() => {
     if (latestOpenOrder) return

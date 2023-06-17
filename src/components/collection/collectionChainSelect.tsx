@@ -7,7 +7,7 @@ import { environment } from '../../constants/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeNetwork, getCurrentNetwork } from '../../store/web3'
 import { requestNetworkChange } from '../../utils/network'
-import useWeb3 from '../../hooks/web3/web3'
+import { useNetwork, useSwitchNetwork } from 'wagmi'
 export default function CollectionChainSelect({
   allowSelection,
   selectedChain,
@@ -19,7 +19,8 @@ export default function CollectionChainSelect({
 }): JSX.Element {
   const [currentChain, setCurrentChain] = useState<Network>()
   const currentNetwork = useSelector(getCurrentNetwork)
-  const { library } = useWeb3()
+  const { chain } = useNetwork()
+  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -42,11 +43,12 @@ export default function CollectionChainSelect({
                 if (
                   chain.environments.find((b) => b.environment === environment && b.active === 1)
                 ) {
-                  if (library && library?.provider) {
-                    requestNetworkChange(library.provider, chain).then()
-                  } else {
-                    dispatch(changeNetwork(chain))
-                  }
+                  // if (library && library?.provider) {
+                  //   requestNetworkChange(library.provider, chain).then()
+                  // } else {
+                  //   dispatch(changeNetwork(chain))
+                  // }
+                  switchNetwork(chain.id)
                 }
               }}
               key={chain.id}

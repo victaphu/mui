@@ -19,7 +19,7 @@ import useToken from '../hooks/web3/token'
 import useMarketplace from '../hooks/web3/marketplace'
 import { DropActionState } from '../types/nft'
 import { CreateDropContainerComponent } from '../types/containers'
-import useWeb3 from '../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 const DropContainer = ({ Component, className }: CreateDropContainerComponent): JSX.Element => {
   const dispatch = useDispatch()
@@ -32,7 +32,7 @@ const DropContainer = ({ Component, className }: CreateDropContainerComponent): 
   const marketplaceContract = useMarketplace()
   const [dropActionState, setDropActionState] = useState<DropActionState>('loading')
   const { getData } = useCrudObjectApi()
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
 
   const copyFromId = useCallback(
     async (id: string) => {

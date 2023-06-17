@@ -7,7 +7,7 @@ import Loader from '../common/loader'
 import { abbreviateNumber, formatDate, trimSentence } from '../../utils/utils'
 import Popup from '../common/popup'
 import Price from '../common/price'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 const CollectionDetailCard = ({
   collection,
@@ -18,7 +18,7 @@ const CollectionDetailCard = ({
 }): JSX.Element => {
   const [editable, setEditable] = useState(false)
   const [descriptionPopup, setDescriptionPopup] = useState(false)
-  const { account } = useWeb3()
+  const { address : account } = useAccount()
 
   const handleReadMore = () => {
     setDescriptionPopup(!descriptionPopup)

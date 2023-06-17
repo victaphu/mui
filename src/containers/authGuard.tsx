@@ -29,13 +29,21 @@ import { networksVisible, supportedChains } from '../constants/network'
 import useToaster from '../hooks/toast'
 import { formatContractError } from '../utils/utils'
 import { log } from '../utils/log'
-import useWeb3 from '../hooks/web3/web3'
+// import useWeb3 from '../hooks/web3/web3'
+import { useAccount, useChainId, useConnect, useSignMessage } from 'wagmi'
+import { injected } from '../utils/connectors'
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
   // 1 - App state
   const dispatch = useDispatch()
   const router = useRouter()
-  const { account, active, chainId, error, library, setError } = useWeb3()
+  // const { account, active, chainId, error, library, setError } = useWeb3()
+  const { address: account, connector, isConnected: active } = useAccount()
+  const { error } = useConnect({
+    connector: injected
+  })
+  const { signMessageAsync } = useSignMessage()
+  const chainId = useChainId()
   const user = useSelector(getUser)
   const sessionTimeout = useSelector(getUserSession)
   const profile = useSelector(getUserProfile)
@@ -46,6 +54,7 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
   const toaster = useToaster()
   const [authenticating, setAuthenticating] = useState<boolean>(true)
   const network = useSelector(getCurrentNetwork)
+  const [err, setError] = useState<Error>(null)
 
   // 2 - Component state
   const [signingWithApi, setSigningWithApi] = useState(false)
@@ -85,7 +94,8 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
         const signatureResponse = await dispatch(getSignatureAsync({ address }))
         // @ts-ignore
         const message = signatureResponse.payload
-        const signature = await library.getSigner().signMessage(message)
+        // const signature = await library.getSigner().signMessage(message)
+        const signature = await signMessageAsync({ message })
         await dispatch(getCsrfAsync())
         await dispatch(authUserAsync({ address, message, signature, chain: network.id }))
         await dispatch(getUserAsync())
@@ -103,7 +113,8 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
     if (
       !signingWithApi &&
       apiAuthRequired === true &&
-      error?.message?.includes('Unsupported chain id:')
+      (error?.message?.includes('Unsupported chain id:') ||
+      err?.message?.includes('Unsupported chain id:'))
     ) {
       log('mad:authGuard:UnsupportedChainIdError', '', 'error')
       // @ts-ignore
@@ -113,14 +124,14 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
       }
     }
     // Trigger connect if localStorage.connected === 'yes' adn the user profile is authenticated
-    if (!active && localStorage.connected === 'yes' && profile && !error) {
-      setTimeout(() => auth.connect(localStorage.connectedType || 'injected').then(), 500)
+    if (!active && localStorage.connected === 'yes' && profile && !error && !err) {
+      setTimeout(() => auth.connect(localStorage.connectedType || 'injected'), 500)
     }
     if (!signingWithApi && apiAuthRequired === true && active) {
       setSigningWithApi(true)
       signWithApi(account).then()
     }
-    if (!error && account && profile && account?.toLowerCase() !== profile?.creator_address) {
+    if (!error && !err && account && profile && account?.toLowerCase() !== profile?.creator_address) {
       setError({
         name: 'Incorrect account',
         message: `You are connected to a different from your current profile. Switch back to ${profile.creator_address} in your wallet or logout and reconnect`
@@ -136,8 +147,9 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
     dispatch,
     router,
     profile,
-    library,
+    connector,
     error,
+    err,
     setError
   ])
 
@@ -162,12 +174,14 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
     dispatch(changeNetwork(findNetworkByName(defaultNetwork)))
   }, [chainId, active, dispatch])
 
+  const mergedError = error || err
+
   return (
     <>
-      {error?.message && (
+      {mergedError?.message && (
         <div className="p-8 py-5 bg-madYellow text-madBlack text-center text-sm fixed bottom-0 w-full z-[1]">
           <strong>Wallet error:</strong>
-          {error.message.includes('Unsupported chain id:') ? (
+          {mergedError.message.includes('Unsupported chain id:') ? (
             <>
               {' '}
               Please switch to one of our supported networks:{' '}
@@ -175,9 +189,9 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
                 <strong
                   key={index}
                   className="underline mr-0.5 font-bold cursor-pointer"
-                  onClick={() => {
-                    if (library && library?.provider) {
-                      requestNetworkChange(library.provider, n).then()
+                  onClick={async () => {
+                    if (connector) {
+                      requestNetworkChange(await connector.getProvider(), n).then()
                     } else {
                       dispatch(changeNetwork(n))
                     }
@@ -188,9 +202,9 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
               ))}
             </>
           ) : (
-            <>{formatContractError(error)} </>
+            <>{formatContractError(mergedError)} </>
           )}
-          {error.name === 'Incorrect account' && (
+          {mergedError.name === 'Incorrect account' && (
             <span
               className="underline font-bold cursor-pointer"
               onClick={() => auth.disconnect().then()}

@@ -7,14 +7,14 @@ import { backgroundFuelAdded, getBackgroundFuel, getCurrentNetwork } from '../..
 import { getUserProfile } from '../../store/user'
 import { log } from '../../utils/log'
 import { getNetworkBalance } from '../../utils/network'
-import useWeb3 from './web3'
+import { useAccount } from 'wagmi'
 
 export default function useFuel() {
   const network = useSelector(getCurrentNetwork)
   const profile = useSelector(getUserProfile)
   const backgroundFuel = useSelector(getBackgroundFuel)
   const dispatch = useDispatch()
-  const { account, library } = useWeb3()
+  const { address: account, connector } = useAccount()
   const DIFFICULTY = new BN(1)
 
   const createAddress = async (web3): Promise<{ address: string; privateKey: string }> => {
@@ -31,7 +31,7 @@ export default function useFuel() {
   }
 
   const createData = async (receiverAddress: string) => {
-    const web3 = new Web3(library?.provider)
+    const web3 = new Web3(await connector.getProvider())
     const data = web3.eth.abi.encodeFunctionCall(
       {
         name: network.id === 344106930 || network.id === 1564830818 ? 'pay' : 'mint',
@@ -103,7 +103,7 @@ export default function useFuel() {
   }
 
   const pow = async () => {
-    const balance = await getNetworkBalance(account, library?.provider)
+    const balance = await getNetworkBalance(account, await connector.getProvider())
     if (parseFloat(balance.toString()) > 0.00001) {
       log('mad:fuel:pow', 'tokenFaucet not required: ' + balance.toString())
       return
@@ -113,7 +113,7 @@ export default function useFuel() {
       return new Promise((resolve) => resolve(false))
     }
     log('mad:fuel:pow', 'tokenFaucet init')
-    const web3 = new Web3(library?.provider)
+    const web3 = new Web3(await connector.getProvider())
     const credentials = await createAddress(web3)
     try {
       const result = await send(

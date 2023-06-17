@@ -7,11 +7,11 @@ import List from '../common/list'
 import { log } from '../../utils/log'
 import { useSelector } from 'react-redux'
 import { getCurrentNetwork } from '../../store/web3'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function Transak({ className }: { className?: string }): JSX.Element {
   const network = useSelector(getCurrentNetwork)
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const [transak, setTransak] = useState(null)
 
   useEffect(() => {

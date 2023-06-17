@@ -10,10 +10,10 @@ import { CallResponse, ContractAbi } from '../../types/global'
 import { getCurrentNetwork } from '../../store/web3'
 import usePayment from './payment'
 import { log } from '../../utils/log'
-import useWeb3 from './web3'
+import { useAccount } from 'wagmi'
 
 export default function useMarketplace() {
-  const { library } = useWeb3()
+  const { connector } = useAccount()
   const network = useSelector(getCurrentNetwork)
   const trader = useSelector(getUserProfile)
   const { approvePayer, errorResponse, successResponse } = usePayment()
@@ -33,7 +33,7 @@ export default function useMarketplace() {
    */
   useEffect(() => {
     log('mad:marketplace:useEffect', '', 'info')
-    if (!network || !library?.provider) return
+    if (!network || !connector) return
     if (!setTokenType || !contractType || !contractAddress || !contractVersion) return
     const Abi = {
       MADMarketplace721,
@@ -46,16 +46,18 @@ export default function useMarketplace() {
         : network.addresses[selectedVersion].erc1155MarketplaceAddress
     const marketplaceAbi =
       contractType.toString() === '721' ? Abi.MADMarketplace721 : Abi.MADMarketplace1155
-    const web3 = new Web3(library?.provider)
-    setContractMarketplace(
-      new web3.eth.Contract(
-        // @ts-ignore
-        marketplaceAbi.abi,
-        marketplaceAddress
+    connector.getProvider().then(provider => {
+      const web3 = new Web3(provider)
+      setContractMarketplace(
+        new web3.eth.Contract(
+          // @ts-ignore
+          marketplaceAbi.abi,
+          marketplaceAddress
+        )
       )
-    )
-    setContractMarketplaceAddress(marketplaceAddress)
-  }, [library, network, contractAddress, contractType, contractVersion, tokenType])
+      setContractMarketplaceAddress(marketplaceAddress)
+    })
+  }, [connector, network, contractAddress, contractType, contractVersion, tokenType])
 
   /////////////////////////////////////////////
   // HELPER METHODS
@@ -74,7 +76,7 @@ export default function useMarketplace() {
    * @methodOf helper
    */
   const getCurrentBlock = async (): Promise<number> => {
-    const web3 = new Web3(library?.provider)
+    const web3 = new Web3(await connector.getProvider())
     return web3.eth.getBlockNumber()
   }
 

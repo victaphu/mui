@@ -17,7 +17,7 @@ import Price from '../common/price'
 import ConnectButton from '../wallet/button'
 import { getCurrentNetwork } from '../../store/web3'
 import { compareAndRequestNetworkChange, findNetworkById } from '../../utils/network'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function BuyPopup({
   buyData,
@@ -27,7 +27,7 @@ export default function BuyPopup({
   closePopup: () => Promise<void>
 }): JSX.Element {
   const dispatch = useDispatch()
-  const { account, library } = useWeb3()
+  const { address: account, connector } = useAccount()
   const network = useSelector(getCurrentNetwork)
   const marketplace = useMarketplace()
   const toaster = useToaster()
@@ -47,7 +47,8 @@ export default function BuyPopup({
   const buy = async () => {
     dispatch(statusUpdated('pending'))
     await compareAndRequestNetworkChange(
-      library?.provider,
+      // library?.provider,
+      await connector.getProvider(),
       dispatch,
       network,
       findNetworkById(buyData?.collection?.chain)

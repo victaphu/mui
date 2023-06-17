@@ -21,10 +21,10 @@ import useERC20 from './erc20'
 import { log } from '../../utils/log'
 import { fromWei } from 'web3-utils'
 import { parseEther } from 'ethers'
-import useWeb3 from './web3'
+import { useAccount } from 'wagmi'
 
 export default function useToken() {
-  const { library } = useWeb3()
+  const { connector } = useAccount()
   const network = useSelector(getCurrentNetwork)
   const toaster = useToaster()
   const { getBalance } = useERC20()
@@ -44,7 +44,7 @@ export default function useToken() {
    */
   useEffect(() => {
     log('mad:token:useEffect', '', 'info')
-    if (!network || !library?.provider || !contractType || !contractAddress || tokenType === null)
+    if (!network || !connector || !contractType || !contractAddress || tokenType === null)
       return
 
     setLoaded(false)
@@ -59,18 +59,20 @@ export default function useToken() {
       ERC1155Lazy
     }
     // 0=Minimal; 1=Basic; 2=Whitelist; 3=Lazy.
-    const tokenContractAbi = contractType === '1155' ? Abi.ERC1155Basic : Abi.ERC721Basic
-    const web3 = new Web3(library?.provider)
-    const selectedVersion = contractVersion === 'external' ? '0.9' : contractVersion
-    // @ts-ignore
-    setTokenContract(new web3.eth.Contract(tokenContractAbi.abi, contractAddress))
-    setMarketplaceAddress(
-      contractType === '721'
-        ? network.addresses[selectedVersion].erc721MarketplaceAddress
-        : network.addresses[selectedVersion].erc1155MarketplaceAddress
-    )
-    setLoaded(true)
-  }, [library, network, contractAddress, contractType, contractVersion, tokenType])
+    connector.getProvider().then(provider => {
+      const tokenContractAbi = contractType === '1155' ? Abi.ERC1155Basic : Abi.ERC721Basic
+      const web3 = new Web3(provider)
+      const selectedVersion = contractVersion === 'external' ? '0.9' : contractVersion
+      // @ts-ignore
+      setTokenContract(new web3.eth.Contract(tokenContractAbi.abi, contractAddress))
+      setMarketplaceAddress(
+        contractType === '721'
+          ? network.addresses[selectedVersion].erc721MarketplaceAddress
+          : network.addresses[selectedVersion].erc1155MarketplaceAddress
+      )
+      setLoaded(true)
+    })
+  }, [connector, network, contractAddress, contractType, contractVersion, tokenType])
 
   // Set data when contracts change
   useEffect(() => {
@@ -258,7 +260,7 @@ export default function useToken() {
     try {
       const splitterAddress = await tokenContract.methods.splitter().call()
       log('mad:token:withdrawSplitterFunds', { ownerAddress, splitterAddress })
-      const web3 = new Web3(library?.provider)
+      const web3 = new Web3(await connector.getProvider())
       const splitterContract = new web3.eth.Contract(
         // @ts-ignore
         SplitterImpl.abi,
@@ -391,7 +393,7 @@ export default function useToken() {
   const getBalances = async (): Promise<CallResponse> => {
     log('mad:token:getBalances', '')
     try {
-      const web3 = new Web3(library?.provider)
+      const web3 = new Web3(await connector.getProvider())
       const erc20 = await getBalance(contractAddress)
       const native = await web3.eth.getBalance(contractAddress)
       const mintFee = await getFeeCount()
@@ -415,7 +417,7 @@ export default function useToken() {
     log('mad:token:getSplitterBalances', { ownerAddress })
     try {
       const splitterAddress = await tokenContract.methods.splitter().call()
-      const web3 = new Web3(library?.provider)
+      const web3 = new Web3(await connector.getProvider())
       const splitterContract = new web3.eth.Contract(
         // @ts-ignore
         SplitterImpl.abi,

@@ -12,7 +12,7 @@ import Loader from '../common/loader'
 import useCrudObjectApi from '../../hooks/api/crudObject'
 import cn from 'classnames'
 import { useRouter } from 'next/router'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function ClaimAuctionPopup({
   claimData,
@@ -25,7 +25,7 @@ export default function ClaimAuctionPopup({
 }): JSX.Element {
   const dispatch = useDispatch()
   const { floorPrice } = useNftPrice(claimData)
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const { getData } = useCrudObjectApi()
 
   const marketplace = useMarketplace()

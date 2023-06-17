@@ -1,3 +1,4 @@
+import { Chain } from 'wagmi'
 import { Network } from '../types/network'
 import { defaultNetwork, environment } from './config'
 
@@ -696,3 +697,19 @@ networksAvailable.map((n) => (walletConnectNetworks[n.id] = n.rpcUrl))
 
 export const supportedChains: number[] = networksAvailable.map((a) => a.id)
 export const supportedChainsWalletConnect = walletConnectNetworks
+
+export const wagmiAdapters: Chain[] = networksVisible.map((network: Network) : Chain => {
+  return {
+    id: network.id,
+    name: network.name,
+    network: network.networkLabel,
+    nativeCurrency: network.currency,
+    rpcUrls: {
+      public: { http: [network.rpcUrl] },
+      default: { http: [network.rpcUrl] }
+    },
+    blockExplorers: {
+      default: { name: 'Explorer', url: network.explorerUrl }
+    },
+  }
+})

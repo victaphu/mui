@@ -4,18 +4,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getApiAuthRequired } from '../../store/web3'
 import { useRouter } from 'next/router'
 import { log } from '../../utils/log'
-import useWeb3 from './web3'
+// import useWeb3 from './web3'
+import { useConnect, useDisconnect } from 'wagmi'
+import { injected } from '../../utils/connectors'
 
 export default function useAuth() {
-  const w3 = useWeb3()
-  const { deactivate, connect } = w3
+  // const w3 = useWeb3()
+  // const { deactivate, connect } = w3
+  const { disconnectAsync : disconnect } = useDisconnect()
+  const { connectAsync: connect } = useConnect({
+    connector: injected
+  })
   const [disconnecting, setDisconnecting] = useState(false)
   const logoutStatus = useSelector(getUserLogoutStatus)
   const apiAuthRequired = useSelector(getApiAuthRequired)
   const dispatch = useDispatch()
   const router = useRouter()
 
-  console.log(w3, 'changed')
+  // console.log(w3, 'changed')
 
   // const connectWithProvider = async (connector) => {
   //   console.log(activate, connector)
@@ -35,15 +41,15 @@ export default function useAuth() {
   //   }
   // }
 
-  const disconnect = async () => {
-    setDisconnecting(true)
-    log('mad:auth:disconnect', '')
-  }
+  // const disconnect = async () => {
+  //   setDisconnecting(true)
+  //   log('mad:auth:disconnect', '')
+  // }
 
   useEffect(() => {
     log('mad:auth:useEffect', '', 'info')
     if (disconnecting && logoutStatus === 'pending') {
-      deactivate()
+      disconnect()
       localStorage.connected = 'none'
       localStorage.connectedType = null
       if (!apiAuthRequired) {
@@ -53,7 +59,7 @@ export default function useAuth() {
         setDisconnecting(false)
       })
     }
-  }, [logoutStatus, apiAuthRequired, dispatch, router, deactivate, disconnecting])
+  }, [logoutStatus, apiAuthRequired, dispatch, router, disconnect, disconnecting])
 
   return {
     connect,

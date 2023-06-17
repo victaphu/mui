@@ -5,7 +5,7 @@ import { requestNetworkChange } from '../../utils/network'
 import { networkDefault, networksVisible } from '../../constants/network'
 import Dropdown from '../form/dropdown'
 import { Network } from '../../types/network'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function NetworkSelect({
   dropdownClassName
@@ -15,7 +15,7 @@ export default function NetworkSelect({
   const [calcCurrentNetwork, setCalcCurrentNetwork] = useState<Network>(null)
   const currentNetwork = useSelector(getCurrentNetwork)
   const dispatch = useDispatch()
-  const { library } = useWeb3()
+  const { connector } = useAccount()
 
   useEffect(() => {
     setCalcCurrentNetwork(
@@ -36,9 +36,11 @@ export default function NetworkSelect({
           returnObject={true}
           nullable={false}
           onChange={(a) => {
-            console.log("Library setup what's happening now?", library)
-            if (library && library?.provider) {
-              requestNetworkChange(library.provider, a).then()
+            console.log("Library setup what's happening now?", connector)
+            if (connector) {
+              connector.getProvider().then(provider => {
+                requestNetworkChange(provider, a).then()
+              })
             } else {
               dispatch(changeNetwork(a))
             }

@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import useAuth from '../../hooks/web3/auth'
 import { isMetaMaskInstalled } from '../../utils/network'
 import { Icon } from '@iconify/react'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function Connector(): JSX.Element {
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const auth = useAuth()
 
   const connect = async (container) => {

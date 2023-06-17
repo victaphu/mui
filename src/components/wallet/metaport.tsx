@@ -14,7 +14,7 @@ import { MetaportConfig } from '@skalenetwork/metaport/build/core/interfaces'
 import { findNetworkById, requestNetworkChange } from '../../utils/network'
 import { environment } from '../../constants/config'
 import Input from '../form/input'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 declare enum TokenType {
   eth = 'eth',
@@ -35,7 +35,7 @@ export default function MetaportComponent({ className }: { className?: string })
   const [loadingPow, setLoadingPow] = useState<boolean>(false)
   const elRef = useRef<HTMLDivElement>(null)
   const { pow } = useFuel()
-  const { library } = useWeb3()
+  const { connector } = useAccount()
 
   const transfer = (
     from: string,
@@ -108,7 +108,7 @@ export default function MetaportComponent({ className }: { className?: string })
       if (isEthereum) {
         const requestNetwork =
           environment === 'mainnet' ? findNetworkById(2046399126) : findNetworkById(476158412)
-        await requestNetworkChange(library.provider, requestNetwork)
+        await requestNetworkChange(await connector.getProvider(), requestNetwork)
         return
       }
 
@@ -116,7 +116,7 @@ export default function MetaportComponent({ className }: { className?: string })
       if (isEuropa) {
         const requestNetwork =
           environment === 'mainnet' ? findNetworkById(1564830818) : findNetworkById(344106930)
-        await requestNetworkChange(library.provider, requestNetwork)
+        await requestNetworkChange(await connector.getProvider(), requestNetwork)
         return
       }
     }
@@ -130,7 +130,7 @@ export default function MetaportComponent({ className }: { className?: string })
     return () => {
       window.removeEventListener('metaport_transferComplete', transferComplete)
     }
-  }, [loadState, network, theme, pow, library.provider])
+  }, [loadState, network, theme, pow, connector])
 
   return (
     <div className={className ? className : ''}>

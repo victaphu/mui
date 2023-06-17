@@ -6,7 +6,7 @@ import { Network } from '../../types/network'
 import { requestNetworkChange } from '../../utils/network'
 import Button from '../form/button'
 import ConnectButton from '../wallet/button'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount, useSwitchNetwork } from 'wagmi'
 
 export default function WrongNetwork({
   compareNetwork,
@@ -15,7 +15,8 @@ export default function WrongNetwork({
   compareNetwork: Network
   message?: string
 }): JSX.Element {
-  const { account, library } = useWeb3()
+  const { address: account } = useAccount()
+  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   const network = useSelector(getCurrentNetwork)
   const [showMessage, setShowMessage] = useState<boolean>(false)
   useEffect(() => {
@@ -36,7 +37,8 @@ export default function WrongNetwork({
               colour="madPink"
               hoverColour="madBlack"
               onClick={() => {
-                requestNetworkChange(library?.provider, compareNetwork).then()
+                // requestNetworkChange(library?.provider, compareNetwork).then()
+                switchNetwork(compareNetwork.id)
               }}
             >
               Switch network

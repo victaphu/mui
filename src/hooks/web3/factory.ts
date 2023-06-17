@@ -12,10 +12,10 @@ import { parseEther } from 'ethers'
 import { CallResponse, ContractAbi } from '../../types/global'
 import { getCurrentNetwork } from '../../store/web3'
 import { log } from '../../utils/log'
-import useWeb3 from './web3'
+import { useAccount } from 'wagmi'
 
 export default function useFactory() {
-  const { library } = useWeb3()
+  const { connector } = useAccount()
   const creator = useSelector(getUserProfile)
   const network = useSelector(getCurrentNetwork)
   const toaster = useToaster()
@@ -38,7 +38,7 @@ export default function useFactory() {
    */
   useEffect(() => {
     log('mad:factory:useEffect', '', 'info')
-    if (!network || !library?.provider || !contractVersion || !contractType) return
+    if (!network || !connector || !contractVersion || !contractType) return
     const Abi = {
       MADFactory721,
       MADFactory1155
@@ -49,10 +49,12 @@ export default function useFactory() {
       contractType === '1155'
         ? network.addresses[selectedVersion].erc1155FactoryAddress
         : network.addresses[selectedVersion].erc721FactoryAddress
-    const web3 = new Web3(library?.provider)
-    // @ts-ignore
-    setContractFactory(new web3.eth.Contract(factoryAbi.abi, factoryAddress))
-  }, [network, contractType, contractVersion, library?.provider])
+    connector.getProvider().then(provider => {
+      const web3 = new Web3()
+      // @ts-ignore
+      setContractFactory(new web3.eth.Contract(factoryAbi.abi, factoryAddress))
+    })
+  }, [network, contractType, contractVersion, connector])
 
   /////////////////////////////////////////////
   // HELPER METHODS

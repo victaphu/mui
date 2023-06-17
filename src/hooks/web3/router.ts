@@ -10,10 +10,10 @@ import { getCurrentNetwork } from '../../store/web3'
 import { parseEther } from 'ethers'
 import usePayment from './payment'
 import { log } from '../../utils/log'
-import useWeb3 from './web3'
+import { useAccount } from 'wagmi'
 
 export default function useTokenRouter() {
-  const { library } = useWeb3()
+  const { connector } = useAccount()
   const creator = useSelector(getUserProfile)
   const network = useSelector(getCurrentNetwork)
   const { approvePayer, errorResponse, successResponse } = usePayment()
@@ -27,7 +27,7 @@ export default function useTokenRouter() {
    */
   useEffect(() => {
     log('mad:router:useEffect', '', 'info')
-    if (!network || !library?.provider || !contractType || !contractVersion) return
+    if (!network || !connector || !contractType || !contractVersion) return
     const Abi = { MADRouter721, MADRouter1155 }
     const routerAbi = contractType === '1155' ? Abi.MADRouter1155 : Abi.MADRouter721
     const selectedVersion = contractVersion === 'external' ? '0.9' : contractVersion
@@ -35,11 +35,14 @@ export default function useTokenRouter() {
       contractType === '1155'
         ? network.addresses[selectedVersion].erc1155RouterAddress
         : network.addresses[selectedVersion].erc721RouterAddress
-    const web3 = new Web3(library?.provider)
-    // @ts-ignore
-    setContractRouter(new web3.eth.Contract(routerAbi.abi, routerAddress))
-    setContractRouterAddress(routerAddress)
-  }, [network, contractType, contractVersion, library?.provider])
+    
+    connector.getProvider().then(provider => {
+      const web3 = new Web3(provider)
+      // @ts-ignore
+      setContractRouter(new web3.eth.Contract(routerAbi.abi, routerAddress))
+      setContractRouterAddress(routerAddress)
+    })
+  }, [network, contractType, contractVersion, connector])
 
   /////////////////////////////////////////////
   // HELPER METHODS

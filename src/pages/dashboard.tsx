@@ -15,12 +15,12 @@ import DashboardAcademy from '../components/dataList/dashboardAcademy'
 import DashboardNfts from '../components/dataList/dashboardNfts'
 import DashboardCollections from '../components/dataList/dashboardCollections'
 import Banner from '../components/common/banner'
-import useWeb3 from '../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 const DashboardPage = (): JSX.Element => {
   const profile = useSelector(getUserProfile)
   const network = useSelector(getCurrentNetwork)
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const { getData, dataLoading } = useCrudObjectApi()
   const [isManager, setIsManager] = useState<boolean>(false)
 

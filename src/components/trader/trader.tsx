@@ -18,7 +18,7 @@ import Link from '../common/link'
 import TimerComponent from '../common/timer'
 import { compareAndRequestNetworkChange, findNetworkById } from '../../utils/network'
 import { getCurrentNetwork } from '../../store/web3'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function Trader({
   nft,
@@ -31,7 +31,7 @@ export default function Trader({
 }): JSX.Element {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { account, library } = useWeb3()
+  const { address: account, connector } = useAccount()
   const { ownerBalance, ownerOrder } = useNftOwner(nft)
   const { floorPrice, floorPriceExact, symbol } = useNftPrice(nft)
   const { inAuction, buyable, biddable, buttonText, latestOpenOrder } = useNftTradeState(nft)
@@ -49,7 +49,8 @@ export default function Trader({
       router.push(`/nft/${nft.token_id}/${nft.contract_id}`).then()
     } else {
       const result = await compareAndRequestNetworkChange(
-        library?.provider,
+        // library?.provider,
+        await connector.getProvider(),
         dispatch,
         network,
         findNetworkById(nft?.collection?.chain)
@@ -63,7 +64,8 @@ export default function Trader({
 
   const onClaimAuction = async (asset) => {
     const result = await compareAndRequestNetworkChange(
-      library?.provider,
+      // library?.provider,
+      await connector.getProvider(),
       dispatch,
       network,
       findNetworkById(nft?.collection?.chain)

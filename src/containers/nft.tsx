@@ -21,7 +21,7 @@ import {
   NftContainerComponent
 } from '../types/containers'
 import useToaster from '../hooks/toast'
-import useWeb3 from '../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 const NftContainer = ({
   Component,
@@ -44,7 +44,7 @@ const NftContainer = ({
   const [burnable, setBurnable] = useState(false)
   const routerContract = useTokenRouter()
   const network = useSelector(getCurrentNetwork)
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const { putData, getData } = useCrudObjectApi()
   const { postData, callUpdate } = useDataLikeObjectApi()
   const { ownerBalance, ownerOrder } = useNftOwner(nft)
@@ -216,7 +216,7 @@ const NftContainer = ({
                     name="burn_quantity"
                     placeholder="Quantity"
                     onChange={(qty) => {
-                      setBurnableQuantity(qty < 0 ? 0 : parseInt(qty.toString()))
+                      setBurnableQuantity(+qty < 0 ? 0 : parseInt(qty.toString()))
                     }}
                   />
                 )}

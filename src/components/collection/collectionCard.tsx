@@ -6,7 +6,7 @@ import { Collection } from '../../types/collection'
 import CollectionActions from './collectionActions'
 import CollectionIcons from './collectionIcons'
 import Price from '../common/price'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 const CollectionCardComponent = ({
   collection,
@@ -16,7 +16,7 @@ const CollectionCardComponent = ({
   className?: string
 }): JSX.Element => {
   const collectionLink = `/collection/${collection.contract_id}`
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
 
   return (
     <div className={className}>

@@ -43,11 +43,11 @@ import Withdraw from '../components/minter/withdraw'
 import { log } from '../utils/log'
 import useFuel from '../hooks/web3/fuel'
 import { getCurrentNetwork } from '../store/web3'
-import useWeb3 from '../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 const EditCollectionPage = (): JSX.Element => {
   const dispatch = useDispatch()
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const network = useSelector(getCurrentNetwork)
   const profile = useSelector(getUserProfile)
   const router = useRouter()
@@ -650,7 +650,7 @@ const EditCollectionPage = (): JSX.Element => {
                     }
                     onChange={(value) =>
                       updateFormData({
-                        max_supply: value < 0 ? 0 : parseInt(value.toString()).toFixed(0)
+                        max_supply: +value < 0 ? 0 : parseInt(value.toString()).toFixed(0)
                       })
                     }
                   />

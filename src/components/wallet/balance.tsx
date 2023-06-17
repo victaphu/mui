@@ -5,10 +5,10 @@ import { getNetworkBalance } from '../../utils/network'
 import { Icon } from '@iconify/react'
 import { abbreviateNumber } from '../../utils/utils'
 import useERC20 from '../../hooks/web3/erc20'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function Balance(): JSX.Element {
-  const { account, library } = useWeb3()
+  const { address: account, connector } = useAccount()
   const network = useSelector(getCurrentNetwork)
   const erc20 = useERC20()
 
@@ -18,12 +18,13 @@ export default function Balance(): JSX.Element {
   // Handle fetch balance and network detail
   useEffect(() => {
     async function fetchBalance() {
-      setBalance(await getNetworkBalance(account, library?.provider))
+      // setBalance(await getNetworkBalance(account, library?.provider))
+      setBalance(await getNetworkBalance(account, await connector.getProvider()))
     }
-    if (network && library?.provider && account) {
+    if (network && connector && account) {
       fetchBalance().then()
     }
-  }, [library, network, account])
+  }, [connector, network, account])
 
   // Handle fetch balance for ERC20 marketplaces
   useEffect(() => {

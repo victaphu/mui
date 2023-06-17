@@ -14,7 +14,7 @@ import Balance from '../wallet/balance'
 import ConnectButton from '../wallet/button'
 import WrongNetwork from '../common/wrongNetwork'
 import { findNetworkById } from '../../utils/network'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function MintNow({
   collection,
@@ -29,7 +29,7 @@ export default function MintNow({
   const [mintState, setMintState] = useState<string>('idle')
   const [mintedNft, setMintedNft] = useState<Nft>(null)
   const tokenContract = useToken()
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const timer = useTimer()
   const network = useSelector(getCurrentNetwork)
 

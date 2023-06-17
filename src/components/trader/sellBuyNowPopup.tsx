@@ -22,7 +22,7 @@ import useCrudObjectApi from '../../hooks/api/crudObject'
 import { getCurrentNetwork } from '../../store/web3'
 import useToken from '../../hooks/web3/token'
 import Button from '../form/button'
-import useWeb3 from '../../hooks/web3/web3'
+import { useAccount } from 'wagmi'
 
 export default function SellBuyNowPopup({
   closePopup,
@@ -38,7 +38,7 @@ export default function SellBuyNowPopup({
   const tokenContract = useToken()
   const tradeAsset = useSelector(getTradeAsset)
   const tradeAssetStatus = useSelector(getTraderStatus)
-  const { account } = useWeb3()
+  const { address: account } = useAccount()
   const { nftObject, setNft, resaleTreasuryFee, creatorRoyalty, resaleTotal } = useFeeCalculator()
   const { ownerBalance } = useNftOwner(tradeAsset)
   const { getData } = useCrudObjectApi()

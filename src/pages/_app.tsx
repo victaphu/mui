@@ -7,16 +7,27 @@ import cn from 'classnames'
 import Script from 'next/script'
 import Navigation from '../components/common/navigation'
 import Footer from '../components/common/footer'
-import { Web3ReactProvider } from '@web3-react/core'
 import ToastBoard from '../components/toaster/board'
 import { Provider } from 'react-redux'
 import store from '../store/store'
 import { AuthGuard } from '../containers/authGuard'
 import { getCookieConsentValue } from 'react-cookie-consent'
-import getLibrary from '../utils/network'
 import { ThemeProvider } from 'next-themes'
-import { MadWeb3Provider } from '../hooks/web3/web3'
+import { WagmiConfig, configureChains, createConfig } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import { wagmiAdapters } from '../constants/network'
+
 const cookieStatus = getCookieConsentValue('MADNFTsCookieStatus')
+
+const { chains, publicClient } = configureChains(
+  wagmiAdapters,
+  [publicProvider()]
+)
+
+const config = createConfig({
+  autoConnect: true,
+  publicClient
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -41,36 +52,34 @@ function MyApp({ Component, pageProps }: AppProps) {
         ''
       )}
 
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <MadWeb3Provider>
-          <Provider store={store}>
-            <ThemeProvider attribute="class">
-              <div
-                id="root"
-                className={cn(
-                  'font-sans overflow-x-hidden',
-                  'bg-madWhite text-madBlack',
-                  'dark:bg-madBlack dark:text-madWhite'
-                )}
-              >
-                <div className={''}>
-                  <div className="nav-fixing" style={{ paddingTop: '72px' }}>
-                    <Navigation />
-                    <AuthGuard>
-                      <div className={'h-page overflow-y-auto overflow-x-hidden'}>
-                        {/* @ts-ignore */}
-                        <Component className={'mt-16'} {...pageProps} />
-                        <Footer {...pageProps} />
-                      </div>
-                    </AuthGuard>
-                  </div>
-                  <ToastBoard />
+      <WagmiConfig config={config}>
+        <Provider store={store}>
+          <ThemeProvider attribute="class">
+            <div
+              id="root"
+              className={cn(
+                'font-sans overflow-x-hidden',
+                'bg-madWhite text-madBlack',
+                'dark:bg-madBlack dark:text-madWhite'
+              )}
+            >
+              <div className={''}>
+                <div className="nav-fixing" style={{ paddingTop: '72px' }}>
+                  <Navigation />
+                  <AuthGuard>
+                    <div className={'h-page overflow-y-auto overflow-x-hidden'}>
+                      {/* @ts-ignore */}
+                      <Component className={'mt-16'} {...pageProps} />
+                      <Footer {...pageProps} />
+                    </div>
+                  </AuthGuard>
                 </div>
+                <ToastBoard />
               </div>
-            </ThemeProvider>
-          </Provider>
-        </MadWeb3Provider>
-      </Web3ReactProvider>
+            </div>
+          </ThemeProvider>
+        </Provider>
+      </WagmiConfig>
     </>
   )
 }
