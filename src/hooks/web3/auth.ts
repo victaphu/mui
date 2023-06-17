@@ -79,7 +79,6 @@ export default function useAuth() {
     router,
     disconnecting,
     disconnectAsync,
-    logoutUserAsync,
     setDisconnecting
   ])
   return {
