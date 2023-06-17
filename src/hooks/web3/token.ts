@@ -57,7 +57,7 @@ export default function useToken() {
       ERC1155Lazy
     }
     // 0=Minimal; 1=Basic; 2=Whitelist; 3=Lazy.
-    connector.getProvider().then(provider => {
+    connector.getProvider().then((provider) => {
       const tokenContractAbi = contractType === '1155' ? Abi.ERC1155Basic : Abi.ERC721Basic
       const web3 = new Web3(provider)
       const selectedVersion = contractVersion === 'external' ? '0.9' : contractVersion
@@ -425,14 +425,14 @@ export default function useToken() {
         response: {
           erc20: network.currency.erc20
             ? parseFloat(
-              (
-                parseInt(
-                  await splitterContract.methods
-                    .releasable(network.currency.erc20, ownerAddress)
-                    .call()
-                ) / 10e17
-              ).toString()
-            )
+                (
+                  parseInt(
+                    await splitterContract.methods
+                      .releasable(network.currency.erc20, ownerAddress)
+                      .call()
+                  ) / 10e17
+                ).toString()
+              )
             : 0,
           native: parseFloat(await splitterContract.methods.releasable(ownerAddress).call())
         }
