@@ -35,9 +35,8 @@ export default function useERC20() {
     log('mad:erc20:useEffect', '', 'info')
     if (!network || !connector || !network?.currency?.erc20) return
 
-    connector.getProvider().then(provider => {
+    connector.getProvider().then((provider) => {
       const web3 = new Web3(provider)
-                
       // @ts-ignore
       setErc20Contract(new web3.eth.Contract(ERC20.abi, network.currency.erc20))
       setLoaded(true)

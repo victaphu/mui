@@ -49,8 +49,8 @@ export default function useFactory() {
       contractType === '1155'
         ? network.addresses[selectedVersion].erc1155FactoryAddress
         : network.addresses[selectedVersion].erc721FactoryAddress
-    connector.getProvider().then(provider => {
-      const web3 = new Web3()
+    connector.getProvider().then((provider) => {
+      const web3 = new Web3(provider)
       // @ts-ignore
       setContractFactory(new web3.eth.Contract(factoryAbi.abi, factoryAddress))
     })

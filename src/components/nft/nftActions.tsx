@@ -18,7 +18,7 @@ export default function NftActions({
   syncIpfs,
   startBurn,
   setFileModalOpen,
-  allowBurn = true,
+  // allowBurn = true,
   allowCopy = true
 }: NftComponent & { allowBurn?: boolean; allowCopy?: boolean }): JSX.Element {
   const { ownerBalance } = useNftOwner(nft)

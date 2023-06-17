@@ -156,7 +156,8 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
     connector,
     error,
     err,
-    setError
+    setError,
+    signMessageAsync
   ])
 
   // Handles network change events and stores 'currentNetwork' and localStorage 'cachedChain'

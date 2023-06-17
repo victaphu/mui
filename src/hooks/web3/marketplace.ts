@@ -46,7 +46,7 @@ export default function useMarketplace() {
         : network.addresses[selectedVersion].erc1155MarketplaceAddress
     const marketplaceAbi =
       contractType.toString() === '721' ? Abi.MADMarketplace721 : Abi.MADMarketplace1155
-    connector.getProvider().then(provider => {
+    connector.getProvider().then((provider) => {
       const web3 = new Web3(provider)
       setContractMarketplace(
         new web3.eth.Contract(

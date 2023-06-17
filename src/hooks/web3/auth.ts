@@ -11,7 +11,7 @@ import { injected } from '../../utils/connectors'
 export default function useAuth() {
   // const w3 = useWeb3()
   // const { deactivate, connect } = w3
-  const { disconnectAsync : disconnect } = useDisconnect()
+  const { disconnectAsync: disconnect } = useDisconnect()
   const { connectAsync: connect } = useConnect({
     connector: injected
   })

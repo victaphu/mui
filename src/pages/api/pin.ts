@@ -49,9 +49,10 @@ const route = async (req: Request, res: Response) => {
         res.status(500).json({ error: e.message })
       })
   } else {
-    let s3Stream
+    // let s3Stream
     try {
-      s3Stream = await s3
+      // s3Stream = 
+      await s3
         .getObject({
           Bucket: s3BucketFixed,
           Key: pinFolder + '/' + key + '.json'

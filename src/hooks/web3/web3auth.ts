@@ -14,7 +14,7 @@ const clientId =
  */
 export default function useWeb3Auth() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null)
-  const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null)
+  const [, setProvider] = useState<SafeEventEmitterProvider | null>(null)
   const [signer, setSigner] = useState<Web3Provider | null>(null)
   const [active, setActive] = useState(false)
   const [chainId, setChainId] = useState(0x13881)

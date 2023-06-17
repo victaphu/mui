@@ -35,8 +35,7 @@ export default function useTokenRouter() {
       contractType === '1155'
         ? network.addresses[selectedVersion].erc1155RouterAddress
         : network.addresses[selectedVersion].erc721RouterAddress
-    
-    connector.getProvider().then(provider => {
+    connector.getProvider().then((provider) => {
       const web3 = new Web3(provider)
       // @ts-ignore
       setContractRouter(new web3.eth.Contract(routerAbi.abi, routerAddress))

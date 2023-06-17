@@ -61,7 +61,7 @@ const EditCollectionPage = (): JSX.Element => {
   const { getData } = useCrudObjectApi()
   const sidebarOpen = useSelector<boolean>(getSidebarOpen)
   const { width } = useWindow()
-  const { pow } = useFuel()
+  // const { pow } = useFuel()
   const updateFormData = (data) => {
     setFormData({ ...formData, ...data })
   }

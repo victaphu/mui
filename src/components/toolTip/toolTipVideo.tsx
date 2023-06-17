@@ -19,13 +19,13 @@ export const ToolTipVideo = ({
   className?: string
 }) => {
   const videoRef = useRef(null)
-  const playVideo = () => {
-    try {
-      videoRef.current.play()
-    } catch (e) {
-      log('mad:playVideo', e, 'error')
-    }
-  }
+  // const playVideo = () => {
+  //   try {
+  //     videoRef.current.play()
+  //   } catch (e) {
+  //     log('mad:playVideo', e, 'error')
+  //   }
+  // }
   const pauseVideo = () => {
     videoRef.current.pause()
   }
