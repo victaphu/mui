@@ -24,6 +24,7 @@
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/walletconnect-connector": "^6.2.13",
     "@web3auth/base": "^6.1.1",
+    "@web3auth/ethereum-provider": "^6.1.1",
     "@web3auth/modal": "^6.1.1",
     "@web3auth/openlogin-adapter": "^6.1.1",
     "@web3auth/web3auth-wagmi-connector": "^4.0.0",

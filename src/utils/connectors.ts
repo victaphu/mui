@@ -4,8 +4,6 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { Connector } from 'wagmi'
 import Web3AuthConnectorInstance from './web3auth'
 
-
-
 export const injected = new InjectedConnector({
   chains: wagmiAdapters
 })
