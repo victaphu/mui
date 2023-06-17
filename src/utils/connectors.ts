@@ -1,30 +1,10 @@
-// import { InjectedConnector } from '@web3-react/injected-connector'
-// import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-// import type { AbstractConnector } from '@web3-react/abstract-connector'
-// import { supportedChains, supportedChainsWalletConnect } from '../constants/network'
-
-// export const injected = new InjectedConnector({
-//   supportedChainIds: supportedChains
-// })
-
-// export const walletConnect = new WalletConnectConnector({
-//   qrcode: true,
-//   infuraId: process.env.REACT_INFURA_KEY,
-//   rpc: supportedChainsWalletConnect,
-//   bridge: 'https://bridge.walletconnect.org'
-// })
-
-// const connectors: Record<string, AbstractConnector> = {
-//   injected,
-//   walletConnect
-// }
-
-// export default connectors
-
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { wagmiAdapters } from '../constants/network'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { Connector } from 'wagmi'
+import Web3AuthConnectorInstance from './web3auth'
+
+
 
 export const injected = new InjectedConnector({
   chains: wagmiAdapters
@@ -38,9 +18,12 @@ export const walletConnect = new WalletConnectConnector({
   }
 })
 
+export const social = Web3AuthConnectorInstance(wagmiAdapters)
+
 const connectors: Record<string, Connector> = {
   injected,
-  walletConnect
+  walletConnect,
+  social
 }
 
 export default connectors

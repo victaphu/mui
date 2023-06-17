@@ -36,7 +36,6 @@ export default function NetworkSelect({
           returnObject={true}
           nullable={false}
           onChange={(a) => {
-            console.log("Library setup what's happening now?", connector)
             if (connector) {
               connector.getProvider().then((provider) => {
                 requestNetworkChange(provider, a).then()
