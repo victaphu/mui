@@ -51,7 +51,7 @@ const route = async (req: Request, res: Response) => {
   } else {
     // let s3Stream
     try {
-      // s3Stream = 
+      // s3Stream =
       await s3
         .getObject({
           Bucket: s3BucketFixed,
