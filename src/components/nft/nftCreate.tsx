@@ -159,9 +159,9 @@ export default function NftCreate({
                         onChange={(value) =>
                           updateDropNft({
                             total_supply:
-                              value < 0
+                              +value < 0
                                 ? 0
-                                : value >
+                                : +value >
                                   createDropData.nft?.collection?.max_supply -
                                     createDropData.nft?.collection?.current_supply
                                 ? createDropData.nft?.collection?.max_supply -
