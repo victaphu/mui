@@ -713,3 +713,7 @@ export const wagmiAdapters: Chain[] = networksVisible.map((network: Network): Ch
     }
   }
 })
+
+export function selectWagmiChain(chainId) {
+  return wagmiAdapters.find((c) => c.id === chainId)
+}

@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { getUserLogoutStatus, logoutUserAsync } from '../../store/user'
 import { useDispatch, useSelector } from 'react-redux'
-import { getApiAuthRequired } from '../../store/web3'
+import { getApiAuthRequired, getCurrentNetwork } from '../../store/web3'
 import { useRouter } from 'next/router'
 import { log } from '../../utils/log'
-// import useWeb3 from './web3'
 import { useConnect, useDisconnect } from 'wagmi'
 import connectors, { injected } from '../../utils/connectors'
+import { selectWagmiChain } from '../../constants/network'
+import Web3AuthConnectorInstance from '../../utils/web3auth'
 
 export default function useAuth() {
-  // const w3 = useWeb3()
-  // const { deactivate, connect } = w3
   const { disconnectAsync } = useDisconnect()
   const { connectAsync } = useConnect({
     connector: injected
   })
+  const currentNetwork = useSelector(getCurrentNetwork)
   const [disconnecting, setDisconnecting] = useState(false)
   const logoutStatus = useSelector(getUserLogoutStatus)
   const apiAuthRequired = useSelector(getApiAuthRequired)
@@ -35,20 +35,15 @@ export default function useAuth() {
 
   const connect = async (container: string) => {
     try {
-      // if (container === 'social') {
-      //   // console.log(container)
-      //   if (active) {
-      //     web3Auth.deactivate()
-      //   }
-      //   await web3Auth.connect(container)
-      //   console.log('>>> set web3 social', web3Auth)
-      //   // setWeb3({ ...web3Auth, connect, disconnect })
-      //   setIsSocial(true)
-      // } else {
-      // setIsSocial(false)
-      const containerSelected = container ? connectors[container] : connectors.injected
-      await connectWithProvider(containerSelected)
-      // }
+      console.log('selected chain is', currentNetwork)
+      if (container === 'social') {
+        const chain = selectWagmiChain(currentNetwork.id)
+        const containerSelected = Web3AuthConnectorInstance([chain])
+        await connectWithProvider(containerSelected)
+      } else {
+        const containerSelected = container ? connectors[container] : connectors.injected
+        await connectWithProvider(containerSelected)
+      }
       localStorage.connected = 'yes'
       localStorage.connectedType = container
       log('mad:auth:connect', container)
