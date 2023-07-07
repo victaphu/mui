@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeNetwork, getCurrentNetwork } from '../../store/web3'
-import { requestNetworkChange } from '../../utils/network'
 import { networkDefault, networksVisible } from '../../constants/network'
 import Dropdown from '../form/dropdown'
 import { Network } from '../../types/network'
-import { useAccount } from 'wagmi'
+import { useAccount, useSwitchNetwork } from 'wagmi'
 
 export default function NetworkSelect({
   dropdownClassName
@@ -14,6 +13,7 @@ export default function NetworkSelect({
 }): JSX.Element {
   const [calcCurrentNetwork, setCalcCurrentNetwork] = useState<Network>(null)
   const currentNetwork = useSelector(getCurrentNetwork)
+  const { switchNetworkAsync } = useSwitchNetwork()
   const dispatch = useDispatch()
   const { connector } = useAccount()
 
@@ -37,10 +37,13 @@ export default function NetworkSelect({
           nullable={false}
           onChange={(a) => {
             if (connector) {
-              connector.getProvider().then((provider) => {
-                requestNetworkChange(provider, a).then()
-              })
+              // connector.getProvider().then((provider) => {
+              //   requestNetworkChange(provider, a).then()
+              // })
+              console.log('trying to connect to chain', a, connector)
+              switchNetworkAsync(+a.id).then()
             } else {
+              console.log('dispatching network change, connector not exist')
               dispatch(changeNetwork(a))
             }
           }}

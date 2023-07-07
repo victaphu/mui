@@ -49,8 +49,10 @@ export const requestNetworkChange = async (provider, network) => {
         params: [{ chainId: web3.utils.toHex(network.id) }]
       })
     } catch (err) {
+      console.log('switching error', err, err.code)
+      console.error(err)
       // This error code indicates that the chain has not been added to MetaMask
-      if (err.code === 4902) {
+      if (err.code === 4902 || err.code === 32603) {
         await provider.request({
           method: 'wallet_addEthereumChain',
           params: [

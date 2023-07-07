@@ -30,7 +30,7 @@ import useToaster from '../hooks/toast'
 import { formatContractError } from '../utils/utils'
 import { log } from '../utils/log'
 // import useWeb3 from '../hooks/web3/web3'
-import { useAccount, useChainId, useConnect, useSignMessage } from 'wagmi'
+import { useAccount, useChainId, useConnect, useSignMessage, useSwitchNetwork } from 'wagmi'
 import { injected } from '../utils/connectors'
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
@@ -55,6 +55,7 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
   const [authenticating, setAuthenticating] = useState<boolean>(true)
   const network = useSelector(getCurrentNetwork)
   const [err, setError] = useState<Error>(null)
+  const { switchNetworkAsync } = useSwitchNetwork()
 
   // 2 - Component state
   const [signingWithApi, setSigningWithApi] = useState(false)
@@ -120,7 +121,8 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
       // @ts-ignore
       if (window.ethereum) {
         // @ts-ignore
-        requestNetworkChange(window.ethereum, network).then()
+        // requestNetworkChange(window.ethereum, network).then()
+        switchNetworkAsync(network.id).then()
       }
     }
     // Trigger connect if localStorage.connected === 'yes' adn the user profile is authenticated
@@ -198,7 +200,8 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
                   className="underline mr-0.5 font-bold cursor-pointer"
                   onClick={async () => {
                     if (connector) {
-                      requestNetworkChange(await connector.getProvider(), n).then()
+                      // requestNetworkChange(await connector.getProvider(), n).then()
+                      switchNetworkAsync(n.id).then()
                     } else {
                       dispatch(changeNetwork(n))
                     }

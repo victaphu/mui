@@ -5,24 +5,21 @@ import { getApiAuthRequired, getCurrentNetwork } from '../../store/web3'
 import { useRouter } from 'next/router'
 import { log } from '../../utils/log'
 import { useConnect, useDisconnect } from 'wagmi'
-import connectors, { injected } from '../../utils/connectors'
-import { selectWagmiChain } from '../../constants/network'
-import Web3AuthConnectorInstance from '../../utils/web3auth'
+import connectors from '../../utils/connectors'
 
 export default function useAuth() {
   const { disconnectAsync } = useDisconnect()
-  const { connectAsync } = useConnect({
-    connector: injected
-  })
-  const currentNetwork = useSelector(getCurrentNetwork)
+  const { connectAsync } = useConnect()
   const [disconnecting, setDisconnecting] = useState(false)
   const logoutStatus = useSelector(getUserLogoutStatus)
   const apiAuthRequired = useSelector(getApiAuthRequired)
   const dispatch = useDispatch()
   const router = useRouter()
+  const currentNetwork = useSelector(getCurrentNetwork)
 
   const connectWithProvider = async (connector) => {
     // await activate(connector)
+    console.log('connector', connector)
     await connectAsync({
       connector
     })
@@ -35,19 +32,20 @@ export default function useAuth() {
 
   const connect = async (container: string) => {
     try {
-      console.log('selected chain is', currentNetwork)
+      let containerSelected = container ? connectors[container] : connectors.injected
       if (container === 'social') {
-        const chain = selectWagmiChain(currentNetwork.id)
-        const containerSelected = Web3AuthConnectorInstance([chain])
-        await connectWithProvider(containerSelected)
-      } else {
-        const containerSelected = container ? connectors[container] : connectors.injected
-        await connectWithProvider(containerSelected)
+        console.log(await containerSelected.getChainId())
+        containerSelected = connectors[currentNetwork.id]
       }
+      
+      console.log('container', container, containerSelected)
+      await connectWithProvider(containerSelected)
       localStorage.connected = 'yes'
       localStorage.connectedType = container
       log('mad:auth:connect', container)
+      console.log('connection is complete', container)
     } catch (err) {
+      console.log('connection is in error', err)
       localStorage.connected = 'none'
       log('mad:auth:connect', err, 'error')
     }

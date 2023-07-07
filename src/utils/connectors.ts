@@ -24,4 +24,5 @@ const connectors: Record<string, Connector> = {
   social
 }
 
+wagmiAdapters.map((chain) => connectors[chain.id] = Web3AuthConnectorInstance([chain, ...wagmiAdapters]))
 export default connectors

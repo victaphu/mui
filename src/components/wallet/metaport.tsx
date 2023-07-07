@@ -14,7 +14,7 @@ import { MetaportConfig } from '@skalenetwork/metaport/build/core/interfaces'
 import { findNetworkById, requestNetworkChange } from '../../utils/network'
 import { environment } from '../../constants/config'
 import Input from '../form/input'
-import { useAccount } from 'wagmi'
+import { useAccount, useSwitchNetwork } from 'wagmi'
 
 declare enum TokenType {
   eth = 'eth',
@@ -30,7 +30,7 @@ export default function MetaportComponent({ className }: { className?: string })
   const [metaport, setMetaport] = useState<Metaport>(null)
   const [metaportConfigData, setMetaPortConfigData] = useState<MetaportConfig>(null)
   const [metaportAmount, setMetaportAmount] = useState<string>('0.25')
-
+  const { switchNetworkAsync } = useSwitchNetwork()
   const [loadState, setLoadState] = useState<'idle' | 'loading' | 'loaded'>('idle')
   const [loadingPow, setLoadingPow] = useState<boolean>(false)
   const elRef = useRef<HTMLDivElement>(null)
@@ -108,7 +108,8 @@ export default function MetaportComponent({ className }: { className?: string })
       if (isEthereum) {
         const requestNetwork =
           environment === 'mainnet' ? findNetworkById(2046399126) : findNetworkById(476158412)
-        await requestNetworkChange(await connector.getProvider(), requestNetwork)
+        // await requestNetworkChange(await connector.getProvider(), requestNetwork)
+        await switchNetworkAsync(requestNetwork.id)
         return
       }
 
@@ -116,7 +117,8 @@ export default function MetaportComponent({ className }: { className?: string })
       if (isEuropa) {
         const requestNetwork =
           environment === 'mainnet' ? findNetworkById(1564830818) : findNetworkById(344106930)
-        await requestNetworkChange(await connector.getProvider(), requestNetwork)
+        // await requestNetworkChange(await connector.getProvider(), requestNetwork)
+        await switchNetworkAsync(requestNetwork.id)
         return
       }
     }

@@ -16,11 +16,14 @@ import { ThemeProvider } from 'next-themes'
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 import { wagmiAdapters } from '../constants/network'
+import connectors from '../utils/connectors'
+import { polygon, polygonMumbai, skaleCalypso, skaleEuropa } from 'viem/chains'
 
 const cookieStatus = getCookieConsentValue('MADNFTsCookieStatus')
 
-const { publicClient } = configureChains(wagmiAdapters, [publicProvider()])
+const { publicClient } = configureChains([polygonMumbai, polygon, skaleCalypso, skaleEuropa], [publicProvider()])
 
+console.log(Object.values(connectors))
 const config = createConfig({
   autoConnect: true,
   publicClient

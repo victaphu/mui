@@ -7,7 +7,7 @@ import { environment } from '../../constants/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeNetwork, getCurrentNetwork } from '../../store/web3'
 import { requestNetworkChange } from '../../utils/network'
-import { useAccount } from 'wagmi'
+import { useAccount, useSwitchNetwork } from 'wagmi'
 // import useWeb3 from '../../hooks/web3/web3'
 export default function CollectionChainSelect({
   allowSelection,
@@ -24,6 +24,7 @@ export default function CollectionChainSelect({
   // const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   const { connector } = useAccount()
   const dispatch = useDispatch()
+  const { switchNetworkAsync } = useSwitchNetwork()
 
   useEffect(() => {
     if (!selectedChain && !currentNetwork) return
@@ -46,8 +47,11 @@ export default function CollectionChainSelect({
                   chain.environments.find((b) => b.environment === environment && b.active === 1)
                 ) {
                   if (connector) {
-                    requestNetworkChange(await connector.getProvider(), chain).then()
+                    // requestNetworkChange(await connector.getProvider(), chain).then()
+                    console.log('changing network - connector found')
+                    switchNetworkAsync(chain.id).then()
                   } else {
+                    console.log('changing network - no connector')
                     dispatch(changeNetwork(chain))
                   }
                 }
@@ -56,15 +60,13 @@ export default function CollectionChainSelect({
               className="flex w-1/2 2xl:w-1/3"
             >
               <div
-                className={`${
-                  chain.id == currentNetwork.id
+                className={`${chain.id == currentNetwork.id
                     ? 'border-madOnyx border-b-madPink'
                     : 'border-madOnyx border-b-black'
-                } ${
-                  !!chain.environments.find((b) => b.environment === environment && b.active === 1)
+                  } ${!!chain.environments.find((b) => b.environment === environment && b.active === 1)
                     ? 'cursor-pointer'
                     : 'opacity-50 cursor-not-allowed'
-                } whitespace-nowrap dark:bg-madOnyx bg-zinc-200 rounded-xl p-3 w-full flex items-center justify-start uppercase border-b-2 mx-1 mb-2`}
+                  } whitespace-nowrap dark:bg-madOnyx bg-zinc-200 rounded-xl p-3 w-full flex items-center justify-start uppercase border-b-2 mx-1 mb-2`}
               >
                 {chain.icon !== 'false' ? (
                   <img width={44} height={44} src={chain.icon} alt="" className="mr-2" />
